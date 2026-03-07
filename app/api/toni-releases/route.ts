@@ -9,6 +9,7 @@ type SpotifyAlbum = {
   images: { url: string; height: number; width: number }[];
   external_urls: { spotify: string };
   release_date: string;
+  artists: { id: string; name: string }[];
 };
 
 export async function GET() {
@@ -50,7 +51,7 @@ async function getSpotifyToken(clientId: string, clientSecret: string): Promise<
 }
 
 async function fetchToniReleases(token: string): Promise<
-  { name: string; image: string; url: string; release_date: string }[]
+  { name: string; image: string; url: string; release_date: string; artists: string[] }[]
 > {
   const res = await fetch(
     `https://api.spotify.com/v1/artists/${TONI_ARTIST_ID}/albums?include_groups=album,single&limit=20&market=NL`,
@@ -69,16 +70,23 @@ async function fetchToniReleases(token: string): Promise<
     image: a.images?.[0]?.url || '',
     url: a.external_urls?.spotify || `https://open.spotify.com/artist/${TONI_ARTIST_ID}`,
     release_date: a.release_date,
+    artists: (a.artists || []).map((ar) => ar.name),
   }));
 }
 
-function getFallbackReleases(): { name: string; image: string; url: string; release_date: string }[] {
+function getFallbackReleases(): {
+  name: string;
+  image: string;
+  url: string;
+  release_date: string;
+  artists: string[];
+}[] {
   const baseUrl = 'https://open.spotify.com/artist/1tE9LhdFz72nhlipsg1ea9';
   return [
-    { name: 'Verliefd', image: '', url: baseUrl, release_date: '2026-01-01' },
-    { name: 'Koud', image: '', url: baseUrl, release_date: '2026-01-01' },
-    { name: 'BLOEDHEET', image: '', url: baseUrl, release_date: '2025-01-01' },
-    { name: 'Broodje Kipfilet', image: '', url: baseUrl, release_date: '2025-01-01' },
-    { name: 'Entre Nous', image: '', url: baseUrl, release_date: '2025-01-01' },
+    { name: 'Verliefd', image: '', url: baseUrl, release_date: '2026-01-01', artists: ['TØNI'] },
+    { name: 'Koud', image: '', url: baseUrl, release_date: '2026-01-01', artists: ['TØNI'] },
+    { name: 'BLOEDHEET', image: '', url: baseUrl, release_date: '2025-01-01', artists: ['TØNI'] },
+    { name: 'Broodje Kipfilet', image: '', url: baseUrl, release_date: '2025-01-01', artists: ['TØNI'] },
+    { name: 'Entre Nous', image: '', url: baseUrl, release_date: '2025-01-01', artists: ['TØNI'] },
   ];
 }

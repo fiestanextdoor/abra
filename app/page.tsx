@@ -5,13 +5,15 @@ import { ToniReleasesCarousel } from '@/components/ToniReleasesCarousel';
 import { SunglassesCarousel } from '@/components/SunglassesCarousel';
 import { Contact } from '@/components/Contact';
 import { Footer } from '@/components/Footer';
+import { getArtists } from '@/lib/spotify';
 
-export default function Home() {
+export default async function Home() {
+  const artists = await getArtists();
   return (
     <main>
       <Header />
       <Hero />
-      <Artists />
+      <Artists initialArtists={artists} />
       <ToniReleasesCarousel />
       <SunglassesCarousel />
       <Contact />
