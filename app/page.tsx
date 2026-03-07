@@ -2,7 +2,7 @@ import { Header } from '@/components/Header';
 import { Hero } from '@/components/Hero';
 import { Artists } from '@/components/Artists';
 import { ToniReleasesCarousel } from '@/components/ToniReleasesCarousel';
-import { SunglassesCarousel } from '@/components/SunglassesCarousel';
+import { SunglassesCard } from '@/components/SunglassesCard';
 import { Contact } from '@/components/Contact';
 import { Footer } from '@/components/Footer';
 import { getArtists } from '@/lib/spotify';
@@ -15,7 +15,7 @@ export default async function Home() {
       <Hero />
       <Artists initialArtists={artists} />
       <ToniReleasesCarousel />
-      <SunglassesCarousel />
+      <SunglassesCard />
       <Contact />
       <Footer />
     </main>

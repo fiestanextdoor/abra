@@ -54,18 +54,10 @@ img {
   display: block;
 }
 
-/* Subtle gradient background for variety */
-.section-alt {
-  background: linear-gradient(
-    180deg,
-    var(--pastel-cream) 0%,
-    var(--pastel-mint) 50%,
-    var(--pastel-cream) 100%
-  );
-}
+/* Zachte overgangen tussen secties: gradients laten in elkaar overlopen */
 
-/* Artiesten-sectie: andere achtergrond zonder groen */
-.artists.section-alt {
+/* Basis sectie-gradient (o.a. TØNI): start en eind in cream */
+.section-alt {
   background: linear-gradient(
     180deg,
     var(--pastel-cream) 0%,
@@ -75,10 +67,24 @@ img {
   );
 }
 
+/* Artiesten: start in peach zodat overgang van hero (eindigt in peach) zacht is */
+.artists.section-alt {
+  background: linear-gradient(
+    180deg,
+    var(--pastel-peach) 0%,
+    var(--pastel-cream) 18%,
+    var(--pastel-lavender) 40%,
+    var(--pastel-peach) 68%,
+    var(--pastel-cream) 100%
+  );
+}
+
+/* Bril: start in cream (na TØNI), geen harde lijn meer */
 .section-lavender {
   background: linear-gradient(
     180deg,
-    var(--pastel-lavender) 0%,
+    var(--pastel-cream) 0%,
+    var(--pastel-lavender) 45%,
     var(--pastel-cream) 100%
   );
 }
@@ -104,7 +110,7 @@ img {
   pointer-events: auto;
 }
 /* ========== Liquid glass header (op basis van ref-code) ========== */
-/* Container = pill, geen schaduw */
+/* Container = pill, breedte wordt door GSAP geanimeerd bij scroll */
 .header-pill.glass-container {
   width: 100%;
   max-width: min(900px, calc(100vw - 2rem));
@@ -239,6 +245,22 @@ img {
   );
   overflow: hidden;
 }
+/* Zachte overgang onder de hero, geen harde lijn */
+.hero::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 120px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--pastel-peach) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
 .hero-shapes {
   position: absolute;
   inset: 0;
@@ -291,10 +313,17 @@ img {
   max-width: 640px;
 }
 .hero-title {
-  font-size: clamp(2.5rem, 8vw, 4.5rem);
-  color: var(--text-dark);
-  margin-bottom: 1rem;
-  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+  line-height: 0;
+}
+.hero-logo {
+  display: inline-block;
+  max-width: min(720px, 96vw);
+}
+.hero-logo-img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 .hero-subtitle {
   font-size: clamp(1rem, 2.5vw, 1.25rem);
@@ -349,6 +378,17 @@ img {
   align-items: center;
   min-height: 320px;
   padding-left: clamp(1.5rem, 5vw, 4rem);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+.artist-card:hover {
+  transform: translateY(-4px);
+}
+.artist-card:hover .artist-card-image-wrap {
+  box-shadow: 0 24px 48px rgba(45, 42, 50, 0.12);
+  transform: scale(1.02);
 }
 @media (max-width: 768px) {
   .artist-card {
@@ -372,6 +412,7 @@ img {
   overflow: hidden;
   aspect-ratio: 4/3;
   box-shadow: 0 20px 40px rgba(45, 42, 50, 0.08);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 .artist-card-image {
   width: 100%;
@@ -395,7 +436,7 @@ img {
   user-select: none;
 }
 .artist-card-content {
-  padding: 0.5rem 0;
+  padding: 1.25rem 1rem 1.25rem 1.5rem;
 }
 .artist-name {
   font-family: 'Sora', sans-serif;
@@ -426,7 +467,7 @@ img {
   color: var(--accent-strong);
   transition: color 0.2s, gap 0.2s;
 }
-.artist-spotify-link:hover {
+.artist-card:hover .artist-spotify-link {
   color: var(--text-dark);
   gap: 0.5rem;
 }
@@ -566,168 +607,115 @@ img {
   margin-top: 0.35rem;
 }
 
-/* Carousel (zonnebril) */
-.carousel-section {
+/* Bril – 1 productkaart (tekst links, foto rechts) */
+.bril-section {
   padding: 4rem 1.5rem 5rem;
 }
-.carousel-heading {
+.bril-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.bril-card-heading {
   text-align: center;
   font-size: clamp(2rem, 5vw, 3rem);
   margin-bottom: 0.5rem;
   color: var(--text-dark);
 }
-.carousel-subheading {
+.bril-card-subheading {
   text-align: center;
   color: var(--text-muted);
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
   font-size: 1.1rem;
 }
-.carousel-wrapper {
-  max-width: 900px;
-  margin: 0 auto;
-  overflow: hidden;
-  border-radius: 1.5rem;
-  box-shadow: 0 24px 48px rgba(45, 42, 50, 0.1);
-  position: relative;
-}
-.carousel-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
-  width: 48px;
-  height: 48px;
-  border: none;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  color: var(--text-dark);
-  font-size: 1.5rem;
-  line-height: 1;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(45, 42, 50, 0.15);
-  transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
-}
-.carousel-btn:hover {
-  background: #fff;
-  transform: translateY(-50%) scale(1.08);
-  box-shadow: 0 6px 20px rgba(45, 42, 50, 0.2);
-}
-.carousel-btn--prev {
-  left: 1rem;
-}
-.carousel-btn--next {
-  right: 1rem;
-}
-@media (max-width: 600px) {
-  .carousel-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 1.25rem;
-  }
-  .carousel-btn--prev { left: 0.5rem; }
-  .carousel-btn--next { right: 0.5rem; }
-}
-.carousel-track {
-  display: flex;
-  width: 300%;
-  will-change: transform;
-}
-.carousel-slide {
-  flex: 0 0 33.333%;
-  min-height: 320px;
-  padding: 2.5rem;
-  display: flex;
+.bril-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
   align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
+  background: linear-gradient(135deg, var(--pastel-lavender) 0%, var(--pastel-sky) 100%);
+  border-radius: 1.5rem;
+  padding: 2rem 2.5rem;
+  box-shadow: 0 16px 40px rgba(45, 42, 50, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
-@media (max-width: 600px) {
-  .carousel-slide {
-    flex-direction: column;
+@media (max-width: 768px) {
+  .bril-card {
+    grid-template-columns: 1fr;
+    padding: 1.5rem;
     text-align: center;
   }
+  .bril-card-image-wrap {
+    order: -1;
+  }
 }
-.carousel-slide-content {
-  flex: 1;
+.bril-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
-.carousel-slide-subtitle {
-  display: block;
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  margin-bottom: 0.25rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-.carousel-slide-title {
-  font-size: clamp(1.5rem, 4vw, 2.25rem);
-  margin-bottom: 1.25rem;
+.bril-card-title {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
   color: var(--text-dark);
+  margin: 0;
 }
-.carousel-cta {
+.bril-card-price {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--accent-strong);
+  margin: 0;
+}
+.bril-card-description {
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+.bril-card-levertijd {
+  color: var(--text-dark);
+  font-size: 0.95rem;
+  margin: 0;
+}
+.bril-card-levertijd strong {
+  font-weight: 600;
+}
+.bril-card-cta {
   display: inline-block;
+  align-self: flex-start;
   padding: 0.75rem 1.75rem;
   background: var(--accent-strong);
   color: white;
   font-weight: 500;
   border-radius: 9999px;
+  margin-top: 0.5rem;
   transition: transform 0.2s, box-shadow 0.2s;
 }
-.carousel-cta:hover {
+.bril-card-cta:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(139, 122, 158, 0.35);
 }
-.carousel-slide-visual {
-  flex-shrink: 0;
+@media (max-width: 768px) {
+  .bril-card-cta {
+    align-self: center;
+  }
 }
-.sunglasses-icon {
-  width: 120px;
-  height: 60px;
-  border: 4px solid var(--text-dark);
-  border-radius: 50% 50% 45% 45%;
-  border-top: none;
-  opacity: 0.5;
-  position: relative;
-}
-.sunglasses-icon::before,
-.sunglasses-icon::after {
-  content: '';
-  position: absolute;
-  top: -4px;
-  width: 50px;
-  height: 28px;
-  border: 4px solid var(--text-dark);
-  border-radius: 50%;
-  border-bottom: none;
-  opacity: 0.5;
-}
-.sunglasses-icon::before {
-  left: 8px;
-}
-.sunglasses-icon::after {
-  right: 8px;
-  left: auto;
-}
-.carousel-dots {
+.bril-card-image-wrap {
+  border-radius: 1rem;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.4);
+  aspect-ratio: 1;
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  margin-top: 1.25rem;
 }
-.carousel-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: none;
-  background: var(--pastel-sage);
-  cursor: pointer;
-  transition: transform 0.2s, background 0.2s;
+.bril-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
-.carousel-dot:hover {
-  background: var(--accent);
-}
-.carousel-dot--active {
-  background: var(--accent-strong);
-  transform: scale(1.2);
+.bril-card-image-wrap img[src="/zonnebril.png"] {
+  padding: 1rem;
 }
 
 /* Contact */

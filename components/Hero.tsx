@@ -1,11 +1,12 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
+import Link from 'next/link';
 import gsap from 'gsap';
 
 export function Hero() {
   const containerRef = useRef<HTMLElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
+  const logoRef = useRef<HTMLAnchorElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLAnchorElement>(null);
   const shapesRef = useRef<HTMLDivElement>(null);
@@ -13,7 +14,7 @@ export function Hero() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        titleRef.current,
+        logoRef.current,
         { opacity: 0, y: 50 },
         { opacity: 1, y: 0, duration: 1, ease: 'power3.out', delay: 0.3 }
       );
@@ -71,8 +72,21 @@ export function Hero() {
         <div className="shape shape-5" />
       </div>
       <div className="hero-content">
-        <h1 ref={titleRef} className="hero-title">
-          Abra Entertainment
+        <h1 className="hero-title">
+          <Link
+            ref={logoRef}
+            href="#"
+            className="hero-logo"
+            aria-label="Abra Entertainment - naar boven"
+          >
+            <img
+              src="/abra-logo.png"
+              alt="Abra Entertainment"
+              className="hero-logo-img"
+              width={600}
+              height={195}
+            />
+          </Link>
         </h1>
         <p ref={subtitleRef} className="hero-subtitle">
           Een modern muzieklabel waar sound en stijl samenkomen. Ontdek onze

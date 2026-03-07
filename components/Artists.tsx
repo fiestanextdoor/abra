@@ -45,7 +45,7 @@ type ArtistsProps = {
 export function Artists({ initialArtists }: ArtistsProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const cardsRef = useRef<(HTMLAnchorElement | null)[]>([]);
   const artists = Array.isArray(initialArtists) && initialArtists.length > 0 ? initialArtists : FALLBACK_ARTISTS;
   const loading = false;
 
@@ -132,11 +132,14 @@ export function Artists({ initialArtists }: ArtistsProps) {
       </h2>
       <div className="artists-list">
         {toShow.map((artist, index) => (
-          <div
+          <a
             key={artist.id}
             ref={(el) => {
               cardsRef.current[index] = el;
             }}
+            href={artist.spotifyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             className={`artist-card ${index % 2 === 1 ? 'artist-card--reverse' : ''}`}
           >
             <div className="artist-card-image-wrap">
@@ -161,16 +164,11 @@ export function Artists({ initialArtists }: ArtistsProps) {
               {artist.genres && artist.genres.length > 0 && (
                 <p className="artist-genres">Genres: {artist.genres.join(', ')}</p>
               )}
-              <a
-                href={artist.spotifyUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="artist-spotify-link"
-              >
+              <span className="artist-spotify-link">
                 Luister op Spotify →
-              </a>
+              </span>
             </div>
-          </div>
+          </a>
         ))}
       </div>
     </section>

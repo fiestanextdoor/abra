@@ -15,15 +15,38 @@ const NAV_LINKS = [
 
 export function Header() {
   const headerRef = useRef<HTMLElement>(null);
+  const pillRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLAnchorElement>(null);
   const navRef = useRef<HTMLElement>(null);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const header = headerRef.current;
+    const pill = pillRef.current;
     if (!header) return;
 
     const ctx = gsap.context(() => {
+      // Start breed: pill begint vrij breed
+      const startWidth = typeof window !== 'undefined'
+        ? Math.min(window.innerWidth * 0.94, 1400)
+        : 1200;
+      const endWidth = typeof window !== 'undefined'
+        ? Math.min(900, window.innerWidth - 32)
+        : 900;
+      gsap.set(pill, { maxWidth: startWidth });
+
+      // Bij scroll: animatie van breed naar smalle pill
+      gsap.to(pill, {
+        maxWidth: endWidth,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: document.body,
+          start: 0,
+          end: 200,
+          scrub: 1,
+        },
+      });
+
       // Entree: logo en nav komen zacht binnen
       gsap.fromTo(
         [logoRef.current, navRef.current],
@@ -45,8 +68,6 @@ export function Header() {
           }
         },
       });
-
-      // Geen schaduw-animatie meer – pill blijft altijd schaduwloos
     }, headerRef);
 
     return () => ctx.revert();
@@ -67,7 +88,7 @@ export function Header() {
 
   return (
     <header ref={headerRef} className="site-header" data-scrolled={scrolled}>
-      <div className="header-pill glass-container glass-container--rounded">
+      <div ref={pillRef} className="header-pill glass-container glass-container--rounded">
         <div className="glass-filter" aria-hidden="true" />
         <div className="glass-overlay" aria-hidden="true" />
         <div className="glass-specular" aria-hidden="true" />
