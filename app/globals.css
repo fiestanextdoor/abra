@@ -343,11 +343,7 @@ img {
   gap: 3rem;
   align-items: center;
   min-height: 320px;
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
-}
-.artist-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 24px 48px rgba(45, 42, 50, 0.1);
+  padding-left: clamp(1.5rem, 5vw, 4rem);
 }
 @media (max-width: 768px) {
   .artist-card {
@@ -417,7 +413,123 @@ img {
   gap: 0.5rem;
 }
 
-/* Carousel */
+/* TØNI releases carousel (tussen artiesten en bril) */
+.toni-releases {
+  padding: 4rem 1.5rem 5rem;
+}
+.toni-releases-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.toni-carousel-heading {
+  text-align: center;
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin-bottom: 0.5rem;
+  color: var(--text-dark);
+}
+.toni-carousel-sub {
+  text-align: center;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+.toni-carousel-loading {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 2rem;
+}
+.toni-carousel-wrapper {
+  overflow: hidden;
+  border-radius: 1.25rem;
+  position: relative;
+}
+.toni-carousel-track {
+  display: flex;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+.toni-carousel-slide {
+  display: flex;
+  align-items: stretch;
+  padding: 0 0.5rem;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease;
+}
+.toni-carousel-slide:hover {
+  transform: scale(1.02);
+}
+.toni-carousel-slide-inner {
+  flex: 1;
+  background: linear-gradient(135deg, var(--pastel-lavender) 0%, var(--pastel-sky) 100%);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(45, 42, 50, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+.toni-carousel-cover {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+  background: rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.toni-carousel-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.toni-carousel-cover-placeholder {
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+.toni-carousel-title {
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--text-dark);
+  margin-bottom: 0.35rem;
+}
+.toni-carousel-cta {
+  font-size: 0.85rem;
+  color: var(--accent-strong);
+  font-weight: 500;
+}
+.toni-carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+.toni-carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: var(--pastel-sage);
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+.toni-carousel-dot:hover {
+  background: var(--accent);
+}
+.toni-carousel-dot--active {
+  background: var(--accent-strong);
+  transform: scale(1.25);
+}
+
+/* Carousel (zonnebril) */
 .carousel-section {
   padding: 4rem 1.5rem 5rem;
 }
