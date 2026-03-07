@@ -118,8 +118,11 @@ export function ToniReleasesCarousel() {
                       <span className="toni-carousel-cover-placeholder">TØNI</span>
                     )}
                   </div>
-                  <span className="toni-carousel-title">{release.name}</span>
-                  <span className="toni-carousel-cta">Luister op Spotify →</span>
+                  <div className="toni-carousel-info">
+                    <span className="toni-carousel-title">{release.name}</span>
+                    <span className="toni-carousel-artist">TØNI</span>
+                    <span className="toni-carousel-cta">Luister op Spotify →</span>
+                  </div>
                 </div>
               </a>
             ))}

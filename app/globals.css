@@ -461,22 +461,23 @@ img {
 }
 .toni-carousel-slide-inner {
   flex: 1;
+  min-height: 0;
   background: linear-gradient(135deg, var(--pastel-lavender) 0%, var(--pastel-sky) 100%);
   border-radius: 1rem;
-  padding: 1.25rem;
+  padding: 0.75rem 1rem;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  text-align: center;
+  gap: 1rem;
   box-shadow: 0 8px 24px rgba(45, 42, 50, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.5);
 }
 .toni-carousel-cover {
-  width: 100%;
-  aspect-ratio: 1;
-  border-radius: 0.75rem;
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  border-radius: 0.5rem;
   overflow: hidden;
-  margin-bottom: 0.75rem;
   background: rgba(255, 255, 255, 0.4);
   display: flex;
   align-items: center;
@@ -490,21 +491,35 @@ img {
 .toni-carousel-cover-placeholder {
   font-family: 'Sora', sans-serif;
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: 0.9rem;
   color: var(--text-muted);
   opacity: 0.7;
+}
+.toni-carousel-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.15rem;
 }
 .toni-carousel-title {
   font-family: 'Sora', sans-serif;
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--text-dark);
-  margin-bottom: 0.35rem;
+  line-height: 1.2;
+}
+.toni-carousel-artist {
+  font-size: 0.85rem;
+  color: var(--text-muted);
 }
 .toni-carousel-cta {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--accent-strong);
   font-weight: 500;
+  margin-top: 0.2rem;
 }
 .toni-carousel-dots {
   display: flex;
