@@ -41,8 +41,10 @@ export function SunglassesCarousel() {
 
   useEffect(() => {
     if (!trackRef.current) return;
+    // Track is 300% breed, elke slide 33.333% → verplaats met 33.333% per slide
+    const offsetPercent = activeIndex * (100 / 3);
     gsap.to(trackRef.current, {
-      x: `-${activeIndex * 100}%`,
+      x: `-${offsetPercent}%`,
       duration: 0.6,
       ease: 'power2.inOut',
     });
@@ -72,6 +74,7 @@ export function SunglassesCarousel() {
   return (
     <section
       ref={sectionRef}
+      id="zonnebril"
       className="carousel-section section-lavender"
       aria-label="Abra zonnebril"
     >
@@ -80,12 +83,29 @@ export function SunglassesCarousel() {
         Officieel merchandise — stijl die bij je past
       </p>
       <div className="carousel-wrapper">
+        <button
+          type="button"
+          className="carousel-btn carousel-btn--prev"
+          aria-label="Vorige slide"
+          onClick={() => setActiveIndex((i) => (i - 1 + SLIDES.length) % SLIDES.length)}
+        >
+          ‹
+        </button>
+        <button
+          type="button"
+          className="carousel-btn carousel-btn--next"
+          aria-label="Volgende slide"
+          onClick={() => setActiveIndex((i) => (i + 1) % SLIDES.length)}
+        >
+          ›
+        </button>
         <div className="carousel-track" ref={trackRef}>
-          {SLIDES.map((slide) => (
+          {SLIDES.map((slide, i) => (
             <div
               key={slide.id}
               className="carousel-slide"
               style={{ background: slide.color }}
+              data-active={i === activeIndex}
             >
               <div className="carousel-slide-content">
                 <span className="carousel-slide-subtitle">{slide.subtitle}</span>

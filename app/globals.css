@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap');
 
 :root {
   /* Pastel huisstijl Abra Entertainment */
@@ -13,6 +13,9 @@
   --text-muted: #6b6572;
   --accent: #b8a9c9;
   --accent-strong: #8b7a9e;
+  /* Liquid glass header */
+  --lg-bg-color: rgba(255, 255, 255, 0.18);
+  --lg-highlight: rgba(255, 255, 255, 0.75);
 }
 
 * {
@@ -61,12 +64,163 @@ img {
   );
 }
 
+/* Artiesten-sectie: andere achtergrond zonder groen */
+.artists.section-alt {
+  background: linear-gradient(
+    180deg,
+    var(--pastel-cream) 0%,
+    var(--pastel-lavender) 35%,
+    var(--pastel-peach) 65%,
+    var(--pastel-cream) 100%
+  );
+}
+
 .section-lavender {
   background: linear-gradient(
     180deg,
     var(--pastel-lavender) 0%,
     var(--pastel-cream) 100%
   );
+}
+
+/* Header: volledig transparant, GEEN schaduw */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  pointer-events: none;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  min-height: 0;
+}
+.site-header * {
+  pointer-events: auto;
+}
+/* ========== Liquid glass header (op basis van ref-code) ========== */
+/* Container = pill, geen schaduw */
+.header-pill.glass-container {
+  width: 100%;
+  max-width: min(900px, calc(100vw - 2rem));
+  border-radius: 9999px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: transparent;
+  overflow: hidden;
+  box-shadow: none;
+  transition: opacity 0.3s ease;
+}
+
+.glass-container--rounded {
+  border-radius: 9999px;
+}
+
+/* Laag 1: blur + optioneel lens-filter */
+.glass-filter {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: 0;
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  filter: saturate(1.1) brightness(1.05);
+}
+
+/* Laag 2: lichte overlay (doorzichtig glas) */
+.glass-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: 1;
+  background: var(--lg-bg-color);
+}
+
+/* Laag 3: specular highlight = zichtbare glasrand (zoals ref) */
+.glass-specular {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: 2;
+  pointer-events: none;
+  box-shadow:
+    inset 1px 1px 0 var(--lg-highlight),
+    inset -1px -1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 0 8px var(--lg-highlight);
+}
+
+/* Content bovenop de lagen */
+.glass-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1.5rem;
+  gap: 1rem;
+}
+
+@media (min-width: 600px) {
+  .glass-content {
+    padding: 0.6rem 2rem;
+  }
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+.header-logo {
+  display: flex;
+  align-items: center;
+  transition: opacity 0.3s, transform 0.2s;
+}
+.header-logo:hover {
+  opacity: 0.85;
+  transform: scale(1.02);
+}
+.header-logo-img {
+  height: 36px;
+  width: auto;
+  max-width: 140px;
+  object-fit: contain;
+}
+@media (min-width: 600px) {
+  .header-logo-img {
+    height: 42px;
+    max-width: 160px;
+  }
+}
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.header-nav-link {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  transition: color 0.2s;
+}
+.header-nav-link:hover {
+  color: var(--accent-strong);
+}
+
+/* Scroll offset voor vaste header bij ankerlinks */
+#artists,
+#zonnebril,
+#contact {
+  scroll-margin-top: 4.5rem;
 }
 
 /* Hero */
@@ -159,8 +313,11 @@ img {
   transition: transform 0.2s, box-shadow 0.2s;
 }
 .hero-cta:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(139, 122, 158, 0.35);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(139, 122, 158, 0.4);
+}
+.hero-cta:active {
+  transform: translateY(-1px);
 }
 
 /* Artists */
@@ -186,6 +343,11 @@ img {
   gap: 3rem;
   align-items: center;
   min-height: 320px;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+.artist-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 48px rgba(45, 42, 50, 0.1);
 }
 @media (max-width: 768px) {
   .artist-card {
@@ -229,9 +391,12 @@ img {
   padding: 0.5rem 0;
 }
 .artist-name {
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
   font-size: clamp(1.75rem, 4vw, 2.25rem);
   margin-bottom: 0.75rem;
   color: var(--text-dark);
+  letter-spacing: -0.02em;
 }
 .artist-description {
   color: var(--text-muted);
@@ -274,11 +439,49 @@ img {
   overflow: hidden;
   border-radius: 1.5rem;
   box-shadow: 0 24px 48px rgba(45, 42, 50, 0.1);
+  position: relative;
+}
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text-dark);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(45, 42, 50, 0.15);
+  transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.carousel-btn:hover {
+  background: #fff;
+  transform: translateY(-50%) scale(1.08);
+  box-shadow: 0 6px 20px rgba(45, 42, 50, 0.2);
+}
+.carousel-btn--prev {
+  left: 1rem;
+}
+.carousel-btn--next {
+  right: 1rem;
+}
+@media (max-width: 600px) {
+  .carousel-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+  }
+  .carousel-btn--prev { left: 0.5rem; }
+  .carousel-btn--next { right: 0.5rem; }
 }
 .carousel-track {
   display: flex;
   width: 300%;
-  transition: transform 0.6s ease;
+  will-change: transform;
 }
 .carousel-slide {
   flex: 0 0 33.333%;

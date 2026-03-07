@@ -32,16 +32,34 @@ const ARTISTS = [
       'https://open.spotify.com/artist/0jFWofJtib9hQ6h6dFgzhk?si=OhVUF_FrTg2gkIp1Vqnckg',
     description:
       'Rens is muzikant en onderdeel van Abra Entertainment. Van Broodje Kipfilet tot Entre Nous — vind alle releases op Spotify en volg de ontwikkeling van RENSPLOP.',
-    gradient: 'linear-gradient(135deg, var(--pastel-sage) 0%, var(--pastel-mint) 100%)',
+    gradient: 'linear-gradient(135deg, var(--pastel-sky) 0%, var(--pastel-blush) 100%)',
   },
 ];
 
 export function Artists() {
   const sectionRef = useRef<HTMLElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      if (headingRef.current) {
+        gsap.fromTo(
+          headingRef.current,
+          { opacity: 0, y: 24 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top 88%',
+              toggleActions: 'play none none none',
+            },
+          }
+        );
+      }
       cardsRef.current.forEach((el, i) => {
         if (!el) return;
         gsap.fromTo(
@@ -72,7 +90,7 @@ export function Artists() {
       className="artists section-alt"
       aria-labelledby="artists-heading"
     >
-      <h2 id="artists-heading" className="artists-heading">
+      <h2 id="artists-heading" ref={headingRef} className="artists-heading">
         Onze artiesten
       </h2>
       <div className="artists-list">

@@ -61,6 +61,15 @@ export function Contact() {
           },
         }
       );
+      // Hover: lichte pulse op e-mail link
+      if (linkRef.current) {
+        linkRef.current.addEventListener('mouseenter', () => {
+          gsap.to(linkRef.current, { scale: 1.03, duration: 0.25, ease: 'power2.out' });
+        });
+        linkRef.current.addEventListener('mouseleave', () => {
+          gsap.to(linkRef.current, { scale: 1, duration: 0.25 });
+        });
+      }
     }, sectionRef);
     return () => ctx.revert();
   }, []);
