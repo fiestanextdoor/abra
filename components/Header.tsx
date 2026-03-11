@@ -8,7 +8,10 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 const NAV_LINKS = [
-  { href: '#artists', label: 'Artiesten' },
+  { href: '/', label: 'Home' },
+  { href: '/over', label: 'Over' },
+  { href: '/artiesten', label: 'Artiesten' },
+  { href: '/join', label: 'Join' },
   { href: '#zonnebril', label: 'Zonnebril' },
   { href: '#contact', label: 'Contact' },
 ];

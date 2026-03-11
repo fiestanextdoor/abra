@@ -349,6 +349,114 @@ img {
   transform: translateY(-1px);
 }
 
+/* Label stats – compacte cijfers onder de hero (pattern van moderne labels) */
+.label-stats {
+  padding: 2rem 1.5rem 3rem;
+}
+.label-stats-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+.label-stat-card {
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 10px 30px rgba(45, 42, 50, 0.06);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  text-align: left;
+}
+.label-stat-value {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 0.25rem;
+}
+.label-stat-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--accent-strong);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.15rem;
+}
+.label-stat-note {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+@media (max-width: 768px) {
+  .label-stats-inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Label services – wat het label doet */
+.label-services {
+  padding: 3rem 1.5rem 4rem;
+}
+.label-services-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+.label-services-heading {
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  margin-bottom: 0.75rem;
+  color: var(--text-dark);
+}
+.label-services-intro {
+  max-width: 640px;
+  margin: 0 auto 2.25rem;
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+.label-services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+.label-service-card {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 1.25rem;
+  padding: 1.75rem 1.5rem;
+  box-shadow: 0 14px 32px rgba(45, 42, 50, 0.06);
+  text-align: left;
+}
+.label-service-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  background: rgba(139, 122, 158, 0.1);
+  color: var(--accent-strong);
+  margin-bottom: 0.75rem;
+}
+.label-service-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-dark);
+}
+.label-service-description {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+@media (max-width: 900px) {
+  .label-services-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Artists */
 .artists {
   padding: 4rem 1.5rem 5rem;
@@ -470,6 +578,65 @@ img {
 .artist-card:hover .artist-spotify-link {
   color: var(--text-dark);
   gap: 0.5rem;
+}
+
+/* Join label – call to action voor demo's */
+.join-label {
+  padding: 3.5rem 1.5rem 4.5rem;
+}
+.join-label-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  border-radius: 1.5rem;
+  padding: 2rem 2.5rem;
+  background: linear-gradient(135deg, var(--pastel-sky) 0%, var(--pastel-lavender) 100%);
+  box-shadow: 0 16px 40px rgba(45, 42, 50, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+.join-label-text {
+  max-width: 620px;
+}
+.join-label-heading {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  margin-bottom: 0.75rem;
+  color: var(--text-dark);
+}
+.join-label-body {
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+.join-label-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.75rem;
+  border-radius: 9999px;
+  background: var(--text-dark);
+  color: var(--pastel-cream);
+  font-weight: 500;
+  white-space: nowrap;
+  text-decoration: none;
+  box-shadow: 0 10px 26px rgba(45, 42, 50, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.join-label-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(45, 42, 50, 0.3);
+  background: #17141d;
+}
+@media (max-width: 768px) {
+  .join-label-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.75rem 1.5rem;
+  }
+  .join-label-cta {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* TØNI releases carousel – fullwidth, oneindige langzame scroll, geen dots */
@@ -755,6 +922,108 @@ img {
 .contact-email:hover {
   background: var(--pastel-lavender);
   color: var(--text-dark);
+}
+
+/* Generic page layout (Over, Artiesten, Join) */
+.page-hero {
+  padding: 7rem 1.5rem 3.5rem;
+  background: linear-gradient(
+    135deg,
+    var(--pastel-mint) 0%,
+    var(--pastel-lavender) 50%,
+    var(--pastel-peach) 100%
+  );
+}
+.page-hero-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+.page-hero-kicker {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+.page-hero-title {
+  font-size: clamp(2.25rem, 5vw, 3.25rem);
+  margin-bottom: 0.75rem;
+  color: var(--text-dark);
+}
+.page-hero-subtitle {
+  font-size: 1rem;
+  color: var(--text-muted);
+  max-width: 620px;
+  margin: 0 auto;
+}
+.page-section {
+  padding: 3rem 1.5rem 4rem;
+}
+.page-section-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.page-section-heading {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  margin-bottom: 1rem;
+  color: var(--text-dark);
+}
+.page-section-text {
+  font-size: 1rem;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+.page-list {
+  list-style: disc;
+  padding-left: 1.25rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+.page-list li + li {
+  margin-top: 0.35rem;
+}
+
+/* Label marquee – lopende strip met platforms / waarden */
+.label-marquee {
+  padding: 1.5rem 0 0;
+  background: linear-gradient(
+    180deg,
+    var(--pastel-cream) 0%,
+    var(--text-dark) 100%
+  );
+}
+.label-marquee-inner {
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+.label-marquee-track {
+  display: inline-flex;
+  gap: 1rem;
+  animation: label-marquee-scroll 30s linear infinite;
+  white-space: nowrap;
+  padding: 0.75rem 1.5rem 1.25rem;
+}
+.label-marquee-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 1.25rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: var(--pastel-cream);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+@keyframes label-marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 /* Footer */
