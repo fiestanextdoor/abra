@@ -40,16 +40,9 @@ function ReleaseCard({ release }: { release: Release }) {
     >
       <div className="release-cover-wrap">
         {release.image ? (
-          <img
-            src={release.image}
-            alt={release.name}
-            className="release-cover-img"
-          />
+          <img src={release.image} alt={release.name} className="release-cover-img" />
         ) : (
-          <div
-            className="release-cover-img"
-            style={{ background: 'var(--surface-highest)' }}
-          />
+          <div className="release-cover-img" style={{ background: 'var(--ae-blue)', opacity: 0.4 }} />
         )}
         <div className="release-play-btn" aria-hidden="true">
           <PlayIcon />
@@ -74,11 +67,14 @@ export function ToniReleasesCarousel({ introComplete }: ToniReleasesCarouselProp
     fetch('/api/toni-releases')
       .then((res) => res.json())
       .then((data: Release[]) => {
-        setReleases(Array.isArray(data) ? data.slice(0, 8) : []);
+        setReleases(Array.isArray(data) ? data : []);
       })
       .catch(() => setReleases([]))
       .finally(() => setLoading(false));
   }, []);
+
+  // Duplicate so the carousel loops seamlessly
+  const track = releases.length > 0 ? [...releases, ...releases] : [];
 
   return (
     <section
@@ -87,11 +83,11 @@ export function ToniReleasesCarousel({ introComplete }: ToniReleasesCarouselProp
       aria-labelledby="releases-heading"
       style={{
         opacity: introComplete ? 1 : 0,
-        transform: introComplete ? 'translateY(0)' : 'translateY(24px)',
+        transform: introComplete ? 'translateY(0)' : 'translateY(20px)',
         transition: 'opacity 0.6s ease, transform 0.6s ease',
       }}
     >
-      <div className="releases-header">
+      <div className="releases-inner-header">
         <div>
           <span className="section-label">new additions</span>
           <h2 id="releases-heading" className="releases-heading">releases</h2>
@@ -109,14 +105,14 @@ export function ToniReleasesCarousel({ introComplete }: ToniReleasesCarouselProp
       {loading ? (
         <p className="releases-loading">laden...</p>
       ) : releases.length === 0 ? (
-        <div className="releases-grid">
-          <p className="releases-empty">geen releases gevonden.</p>
-        </div>
+        <p className="releases-loading">geen releases gevonden.</p>
       ) : (
-        <div className="releases-grid">
-          {releases.map((release, i) => (
-            <ReleaseCard key={`${release.name}-${i}`} release={release} />
-          ))}
+        <div className="releases-carousel-wrapper">
+          <div className="releases-carousel-track">
+            {track.map((release, i) => (
+              <ReleaseCard key={`${release.name}-${i}`} release={release} />
+            ))}
+          </div>
         </div>
       )}
     </section>

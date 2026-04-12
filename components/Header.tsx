@@ -11,9 +11,10 @@ export function Header() {
   return (
     <header className="site-header">
       <Link href="/" aria-label="abra entertainment home">
+        {/* Cream logo on light-blue header */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/Logo AE zwart png '26.png"
+          src="/Logo AE creme png '26.png"
           alt="Abra Entertainment"
           className="header-logo-img"
         />

@@ -15,7 +15,6 @@ const NAV_RIGHT = [
 export function Footer() {
   return (
     <footer className="footer">
-      {/* Top nav row */}
       <div className="footer-nav-row">
         <div className="footer-nav-col">
           <span className="footer-nav-label">navigatie</span>
@@ -54,18 +53,16 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Footer logo image + big wordmark */}
-      <div className="footer-wordmark-wrap">
+      {/* Logo image only — no text wordmark */}
+      <div className="footer-logo-wrap">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/Sitefooter AE.png"
           alt="Abra Entertainment"
           className="footer-logo-img"
         />
-        <h2 className="footer-wordmark">abra entertainment</h2>
       </div>
 
-      {/* Bottom bar */}
       <div className="footer-bottom">
         <span className="footer-copy">
           &copy; {new Date().getFullYear()} abra entertainment. alle rechten voorbehouden.
