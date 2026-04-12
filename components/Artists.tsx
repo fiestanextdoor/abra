@@ -1,10 +1,6 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { motion } from 'framer-motion';
 
 type ArtistFromApi = {
   id: string;
@@ -14,21 +10,18 @@ type ArtistFromApi = {
   genres?: string[];
 };
 
-const ARTIST_DESCRIPTIONS: Record<string, { description: string; gradient: string }> = {
+const ARTIST_DESCRIPTIONS: Record<string, { description: string }> = {
   '1tE9LhdFz72nhlipsg1ea9': {
     description:
-      'Toon Abramin van de Sluis is een selfmade artiest die bijna 10 jaar vooral beats produceerde. Geïnspireerd door producer Esko begon hij met trap, en ontdekte later drill, techhouse, deephouse en afro beats. Sinds 2025 gebruikt hij zijn stem — humoristische pop in de lijn van Antoon en Roxy Dekker. Luister naar Verliefd, Koud en meer op Spotify.',
-    gradient: 'linear-gradient(135deg, var(--pastel-lavender) 0%, var(--pastel-sky) 100%)',
+      'Toon Abramin van de Sluis is een selfmade artiest die bijna 10 jaar vooral beats produceerde. Geïnspireerd door producer Esko begon hij met trap, en ontdekte later drill, techhouse, deephouse en afro beats. Sinds 2025 gebruikt hij zijn stem.',
   },
   '5NcvBSEJrkWS2Gpng3Vj6w': {
     description:
       'AREnD maakt deel uit van het Abra Entertainment-collectief met tracks als Verliefd, Koud en BLOEDHEET. Ontdek de sound van Entre Nous en de rest van het repertoire op Spotify.',
-    gradient: 'linear-gradient(135deg, var(--pastel-peach) 0%, var(--pastel-blush) 100%)',
   },
   '0jFWofJtib9hQ6h6dFgzhk': {
     description:
       'Rens is muzikant en onderdeel van Abra Entertainment. Van Broodje Kipfilet tot Entre Nous — vind alle releases op Spotify en volg de ontwikkeling van RENSPLOP.',
-    gradient: 'linear-gradient(135deg, var(--pastel-sky) 0%, var(--pastel-blush) 100%)',
   },
 };
 
@@ -40,137 +33,89 @@ const FALLBACK_ARTISTS: ArtistFromApi[] = [
 
 type ArtistsProps = {
   initialArtists: ArtistFromApi[];
+  introComplete?: boolean;
 };
 
-export function Artists({ initialArtists }: ArtistsProps) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const cardsRef = useRef<(HTMLAnchorElement | null)[]>([]);
-  const artists = Array.isArray(initialArtists) && initialArtists.length > 0 ? initialArtists : FALLBACK_ARTISTS;
-  const loading = false;
+function ArtistCard({
+  artist,
+  index,
+}: {
+  artist: ArtistFromApi & { description: string; genres: string[] };
+  index: number;
+}) {
+  return (
+    <motion.article
+      className="artist-card"
+      variants={{
+        hidden: { opacity: 0, y: 48 },
+        show: {
+          opacity: 1,
+          y: 0,
+          transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: index * 0.1 },
+        },
+      }}
+    >
+      <a
+        href={artist.spotifyUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="artist-card-link"
+      >
+        {artist.image ? (
+          <img
+            src={artist.image}
+            alt={`Profielfoto van ${artist.name}`}
+            className="artist-card-img"
+          />
+        ) : (
+          <div className="artist-card-fallback">
+            <span className="artist-initial">{artist.name.charAt(0)}</span>
+          </div>
+        )}
 
-  useEffect(() => {
-    if (artists.length === 0) return;
-    const ctx = gsap.context(() => {
-      if (headingRef.current) {
-        gsap.fromTo(
-          headingRef.current,
-          { opacity: 0, y: 24 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: 'top 88%',
-              toggleActions: 'play none none none',
-            },
-          }
-        );
-      }
-      cardsRef.current.forEach((el, i) => {
-        if (!el) return;
-        gsap.fromTo(
-          el,
-          { opacity: 0, y: 60 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: el,
-              start: 'top 85%',
-              end: 'top 60%',
-              toggleActions: 'play none none none',
-            },
-          }
-        );
-      });
-    }, sectionRef);
-    return () => ctx.revert();
-  }, [artists.length]);
-
-  const merged = artists.map((a) => ({
-    ...a,
-    description: ARTIST_DESCRIPTIONS[a.id]?.description ?? '',
-    gradient: ARTIST_DESCRIPTIONS[a.id]?.gradient ?? 'linear-gradient(135deg, var(--pastel-lavender) 0%, var(--pastel-sky) 100%)',
-    genres: a.genres ?? [],
-  }));
-
-  if (loading && merged.length === 0) {
-    return (
-      <section ref={sectionRef} id="artists" className="artists section-alt" aria-labelledby="artists-heading">
-        <h2 id="artists-heading" ref={headingRef} className="artists-heading">
-          Onze artiesten
-        </h2>
-        <div className="artists-list">
-          <div className="artist-loading">Laden…</div>
+        <div className="artist-card-overlay">
+          <h3 className="artist-name">{artist.name}</h3>
+          <div className="artist-card-hover-info">
+            <p className="artist-description">{artist.description}</p>
+            <span className="artist-spotify-link">luister op spotify &rarr;</span>
+          </div>
         </div>
-      </section>
-    );
-  }
+      </a>
+    </motion.article>
+  );
+}
 
-  const toShow = merged.length > 0 ? merged : FALLBACK_ARTISTS.map((a) => ({
+export function Artists({ initialArtists, introComplete = true }: ArtistsProps) {
+  const base =
+    Array.isArray(initialArtists) && initialArtists.length > 0
+      ? initialArtists
+      : FALLBACK_ARTISTS;
+
+  const artists = base.map((a) => ({
     ...a,
     description: ARTIST_DESCRIPTIONS[a.id]?.description ?? '',
-    gradient: ARTIST_DESCRIPTIONS[a.id]?.gradient ?? 'linear-gradient(135deg, var(--pastel-lavender) 0%, var(--pastel-sky) 100%)',
     genres: a.genres ?? [],
   }));
-  if (toShow.length === 0) return null;
+
+  if (artists.length === 0) return null;
 
   return (
-    <section
-      ref={sectionRef}
-      id="artists"
-      className="artists section-alt"
-      aria-labelledby="artists-heading"
-    >
-      <h2 id="artists-heading" ref={headingRef} className="artists-heading">
-        Onze artiesten
-      </h2>
-      <div className="artists-list">
-        {toShow.map((artist, index) => (
-          <a
-            key={artist.id}
-            ref={(el) => {
-              cardsRef.current[index] = el;
-            }}
-            href={artist.spotifyUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`artist-card ${index % 2 === 1 ? 'artist-card--reverse' : ''}`}
-          >
-            <div className="artist-card-image-wrap">
-              <div
-                className="artist-card-image"
-                style={{ background: artist.gradient }}
-              >
-                {artist.image ? (
-                  <img
-                    src={artist.image}
-                    alt={`Profielfoto van ${artist.name} op Spotify`}
-                    className="artist-card-img"
-                  />
-                ) : (
-                  <span className="artist-initial">{artist.name.charAt(0)}</span>
-                )}
-              </div>
-            </div>
-            <div className="artist-card-content">
-              <h3 className="artist-name">{artist.name}</h3>
-              <p className="artist-description">{artist.description}</p>
-              {artist.genres && artist.genres.length > 0 && (
-                <p className="artist-genres">Genres: {artist.genres.join(', ')}</p>
-              )}
-              <span className="artist-spotify-link">
-                Luister op Spotify →
-              </span>
-            </div>
-          </a>
-        ))}
+    <section id="artists" className="artists" aria-labelledby="artists-heading">
+      <div className="artists-header">
+        <span className="section-label">the collective</span>
+        <h2 id="artists-heading" className="artists-heading">artiesten</h2>
       </div>
+
+      <motion.div
+        className="artists-grid"
+        initial="hidden"
+        animate={introComplete ? 'show' : 'hidden'}
+        variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1 } } }}
+      >
+        {artists.map((artist, i) => (
+          <ArtistCard key={artist.id} artist={artist} index={i} />
+        ))}
+      </motion.div>
     </section>
   );
 }

@@ -1,10 +1,6 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { useEffect, useState } from 'react';
 
 type Release = {
   name: string;
@@ -14,8 +10,63 @@ type Release = {
   artists?: string[];
 };
 
-export function ToniReleasesCarousel() {
-  const sectionRef = useRef<HTMLElement>(null);
+type ToniReleasesCarouselProps = {
+  introComplete: boolean;
+};
+
+function PlayIcon() {
+  return (
+    <div className="release-play-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M8 5v14l11-7z" />
+      </svg>
+    </div>
+  );
+}
+
+function ReleaseCard({ release }: { release: Release }) {
+  const year = release.release_date ? release.release_date.split('-')[0] : '';
+  const artistLabel =
+    release.artists && release.artists.length > 0
+      ? release.artists.join(', ')
+      : 'tøni';
+
+  return (
+    <a
+      href={release.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="release-card"
+    >
+      <div className="release-cover-wrap">
+        {release.image ? (
+          <img
+            src={release.image}
+            alt={release.name}
+            className="release-cover-img"
+          />
+        ) : (
+          <div
+            className="release-cover-img"
+            style={{ background: 'var(--surface-highest)' }}
+          />
+        )}
+        <div className="release-play-btn" aria-hidden="true">
+          <PlayIcon />
+        </div>
+      </div>
+
+      <div className="release-meta">
+        <span className="release-title">{release.name}</span>
+        <span className="release-artist-date">
+          {artistLabel}{year ? ` — ${year}` : ''}
+        </span>
+      </div>
+    </a>
+  );
+}
+
+export function ToniReleasesCarousel({ introComplete }: ToniReleasesCarouselProps) {
   const [releases, setReleases] = useState<Release[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -23,90 +74,51 @@ export function ToniReleasesCarousel() {
     fetch('/api/toni-releases')
       .then((res) => res.json())
       .then((data: Release[]) => {
-        setReleases(Array.isArray(data) ? data : []);
+        setReleases(Array.isArray(data) ? data.slice(0, 8) : []);
       })
       .catch(() => setReleases([]))
       .finally(() => setLoading(false));
   }, []);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      if (!sectionRef.current) return;
-      gsap.fromTo(
-        sectionRef.current.querySelector('.toni-carousel-heading'),
-        { opacity: 0, y: 24 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 82%',
-            toggleActions: 'play none none none',
-          },
-        }
-      );
-    }, sectionRef);
-    return () => ctx.revert();
-  }, []);
-
-  if (loading && releases.length === 0) {
-    return (
-      <section ref={sectionRef} className="toni-releases section-alt" aria-label="TØNI releases">
-        <div className="toni-releases-inner toni-releases-inner--full">
-          <h2 className="toni-carousel-heading">Laatste releases van TØNI</h2>
-          <div className="toni-carousel-loading">Laden…</div>
-        </div>
-      </section>
-    );
-  }
-
-  if (releases.length === 0) return null;
-
-  const duplicated = [...releases, ...releases];
-
   return (
     <section
-      ref={sectionRef}
-      className="toni-releases section-alt toni-releases--fullwidth"
-      aria-label="Laatste releases van TØNI"
+      id="releases"
+      className="releases"
+      aria-labelledby="releases-heading"
+      style={{
+        opacity: introComplete ? 1 : 0,
+        transform: introComplete ? 'translateY(0)' : 'translateY(24px)',
+        transition: 'opacity 0.6s ease, transform 0.6s ease',
+      }}
     >
-      <div className="toni-releases-inner toni-releases-inner--full">
-        <h2 className="toni-carousel-heading">Laatste releases van TØNI</h2>
-        <p className="toni-carousel-sub">Luister op Spotify – wordt automatisch bijgewerkt</p>
-        <div className="toni-carousel-wrapper toni-carousel-wrapper--full">
-          <div className="toni-carousel-track toni-carousel-track--infinite">
-            {duplicated.map((release, i) => (
-              <a
-                key={`${release.name}-${i}`}
-                href={release.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="toni-carousel-slide"
-              >
-                <div className="toni-carousel-slide-inner">
-                  <div className="toni-carousel-cover">
-                    {release.image ? (
-                      <img src={release.image} alt="" />
-                    ) : (
-                      <span className="toni-carousel-cover-placeholder">TØNI</span>
-                    )}
-                  </div>
-                  <div className="toni-carousel-info">
-                    <span className="toni-carousel-title">{release.name}</span>
-                    <span className="toni-carousel-artist">
-                      {(release.artists && release.artists.length > 0)
-                        ? release.artists.join(', ')
-                        : 'TØNI'}
-                    </span>
-                    <span className="toni-carousel-cta">Luister op Spotify →</span>
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
+      <div className="releases-header">
+        <div>
+          <span className="section-label">new additions</span>
+          <h2 id="releases-heading" className="releases-heading">releases</h2>
         </div>
+        <a
+          href="https://open.spotify.com/artist/1tE9LhdFz72nhlipsg1ea9"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="releases-archive-link"
+        >
+          alle releases
+        </a>
       </div>
+
+      {loading ? (
+        <p className="releases-loading">laden...</p>
+      ) : releases.length === 0 ? (
+        <div className="releases-grid">
+          <p className="releases-empty">geen releases gevonden.</p>
+        </div>
+      ) : (
+        <div className="releases-grid">
+          {releases.map((release, i) => (
+            <ReleaseCard key={`${release.name}-${i}`} release={release} />
+          ))}
+        </div>
+      )}
     </section>
   );
 }

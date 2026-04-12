@@ -1,5 +1,6 @@
 import { Header } from '@/components/Header';
 import { Artists } from '@/components/Artists';
+import { Footer } from '@/components/Footer';
 import { getArtists } from '@/lib/spotify';
 
 export default async function ArtiestenPage() {
@@ -8,18 +9,18 @@ export default async function ArtiestenPage() {
   return (
     <>
       <Header />
-      <main>
-        <section className="page-hero" aria-label="Artiesten bij Abra Entertainment">
-          <div className="page-hero-inner">
-            <p className="page-hero-kicker">Roster</p>
-            <h1 className="page-hero-title">Onze artiesten</h1>
-            <p className="page-hero-subtitle">
-              Een compacte selectie artiesten die passen bij de Abra-sound en elkaar versterken.
+      <main className="subpage">
+        <section className="subpage-hero" aria-label="artiesten bij abra entertainment">
+          <div className="subpage-inner">
+            <h1 className="subpage-title">artiesten</h1>
+            <p className="subpage-copy">
+              een compacte selectie artiesten die passen bij de abra sound en elkaar versterken.
             </p>
           </div>
         </section>
         <Artists initialArtists={artists} />
       </main>
+      <Footer />
     </>
   );
 }
