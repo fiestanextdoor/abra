@@ -26,12 +26,12 @@ export async function GET() {
     const token = await getSpotifyToken(clientId, clientSecret);
     const releases = await fetchToniReleases(token);
     return NextResponse.json(releases, {
-      headers: { 'Cache-Control': 'public, s-maxage=3600' },
+      headers: { 'Cache-Control': 'no-store' },
     });
   } catch (e) {
     console.error('Spotify API error:', e);
     return NextResponse.json(getFallbackReleases(), {
-      headers: { 'Cache-Control': 'public, s-maxage=300' },
+      headers: { 'Cache-Control': 'no-store' },
     });
   }
 }
@@ -44,6 +44,7 @@ async function getSpotifyToken(clientId: string, clientSecret: string): Promise<
       Authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`,
     },
     body: 'grant_type=client_credentials',
+    cache: 'no-store',
   });
   if (!res.ok) throw new Error('Spotify token failed');
   const data = await res.json();
@@ -59,7 +60,7 @@ async function fetchToniReleases(token: string): Promise<
   while (true) {
     const res = await fetch(
       `https://api.spotify.com/v1/artists/${TONI_ARTIST_ID}/albums?include_groups=album,single&limit=50&offset=${offset}&market=NL`,
-      { headers: { Authorization: `Bearer ${token}` } }
+      { headers: { Authorization: `Bearer ${token}` }, cache: 'no-store' }
     );
     if (!res.ok) throw new Error('Spotify albums failed');
     const data = await res.json();
