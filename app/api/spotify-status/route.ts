@@ -76,10 +76,19 @@ export async function GET() {
       image: a.images?.[0]?.url ?? '',
       hasImage: !!(a.images?.[0]?.url),
     }));
+
+    // Stap 4: test albums endpoint (voor de releases carousel)
+    const albumsRes = await fetch(
+      `https://api.spotify.com/v1/artists/1tE9LhdFz72nhlipsg1ea9/albums?include_groups=album,single&limit=5&market=NL`,
+      { headers: { Authorization: `Bearer ${token}` }, cache: 'no-store' }
+    );
+
     return NextResponse.json({
       ok: true,
-      message: 'Spotify werkt correct.',
+      message: 'Spotify batch werkt correct.',
       artists,
+      albums_status: albumsRes.status,
+      albums_ok: albumsRes.ok,
     });
   } catch (e) {
     return NextResponse.json({
