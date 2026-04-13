@@ -57,22 +57,30 @@ async function getSpotifyToken(clientId: string, clientSecret: string): Promise<
 async function fetchArtists(token: string): Promise<
   { id: string; name: string; image: string; spotifyUrl: string }[]
 > {
-  const ids = ARTIST_IDS.join(',');
-  const res = await fetch(`https://api.spotify.com/v1/artists?ids=${ids}`, {
-    headers: { Authorization: `Bearer ${token}` },
-    cache: 'no-store',
-  });
-  if (!res.ok) throw new Error('Spotify artists failed');
-  const data = await res.json();
-  const raw = (data.artists || []) as (SpotifyArtist | null)[];
-  return raw
-    .filter((a): a is SpotifyArtist => a != null && a.id != null)
-    .map((a) => ({
-      id: a.id,
-      name: a.name,
-      image: a.images?.[0]?.url || '',
-      spotifyUrl: a.external_urls?.spotify || `https://open.spotify.com/artist/${a.id}`,
-    }));
+  // Individuele calls — batch-endpoint geeft 403 op bepaalde omgevingen.
+  const results = await Promise.all(
+    ARTIST_IDS.map((id) =>
+      fetch(`https://api.spotify.com/v1/artists/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+        cache: 'no-store',
+      })
+    )
+  );
+
+  const artists = await Promise.all(
+    results.map(async (res, i) => {
+      if (!res.ok) return null;
+      const a = await res.json() as SpotifyArtist;
+      return {
+        id: a.id,
+        name: a.name,
+        image: a.images?.[0]?.url || '',
+        spotifyUrl: a.external_urls?.spotify || `https://open.spotify.com/artist/${ARTIST_IDS[i]}`,
+      };
+    })
+  );
+
+  return artists.filter((a): a is NonNullable<typeof a> => a !== null);
 }
 
 function getFallbackArtists(): { id: string; name: string; image: string; spotifyUrl: string }[] {

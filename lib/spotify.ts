@@ -38,28 +38,38 @@ export async function getArtists(): Promise<ArtistData[]> {
     return getFallbackArtists();
   }
   try {
-    const res = await fetch(`https://api.spotify.com/v1/artists?ids=${ARTIST_IDS.join(',')}`, {
-      headers: { Authorization: `Bearer ${token}` },
-      cache: 'no-store',
-    });
-    if (!res.ok) return getFallbackArtists();
-    const data = await res.json();
-    const raw = (data.artists || []) as {
-      id: string;
-      name: string;
-      images: { url: string }[];
-      external_urls: { spotify: string };
-      genres?: string[];
-    }[];
-    return raw
-      .filter((a) => a && a.id)
-      .map((a) => ({
-        id: a.id,
-        name: a.name,
-        image: a.images?.[0]?.url ?? '',
-        spotifyUrl: a.external_urls?.spotify ?? `https://open.spotify.com/artist/${a.id}`,
-        genres: Array.isArray(a.genres) ? a.genres : [],
-      }));
+    // Individuele calls per artiest — de batch-endpoint geeft 403 op bepaalde omgevingen.
+    const results = await Promise.all(
+      ARTIST_IDS.map((id) =>
+        fetch(`https://api.spotify.com/v1/artists/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+          cache: 'no-store',
+        })
+      )
+    );
+
+    const artists = await Promise.all(
+      results.map(async (res, i) => {
+        if (!res.ok) return null;
+        const a = await res.json() as {
+          id: string;
+          name: string;
+          images: { url: string }[];
+          external_urls: { spotify: string };
+          genres?: string[];
+        };
+        return {
+          id: a.id,
+          name: a.name,
+          image: a.images?.[0]?.url ?? '',
+          spotifyUrl: a.external_urls?.spotify ?? `https://open.spotify.com/artist/${ARTIST_IDS[i]}`,
+          genres: Array.isArray(a.genres) ? a.genres : [],
+        };
+      })
+    );
+
+    const valid = artists.filter((a): a is NonNullable<typeof a> => a !== null);
+    return valid.length > 0 ? valid : getFallbackArtists();
   } catch {
     return getFallbackArtists();
   }
