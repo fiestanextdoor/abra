@@ -53,19 +53,25 @@ async function getSpotifyToken(clientId: string, clientSecret: string): Promise<
 async function fetchToniReleases(token: string): Promise<
   { name: string; image: string; url: string; release_date: string; artists: string[] }[]
 > {
-  const res = await fetch(
-    `https://api.spotify.com/v1/artists/${TONI_ARTIST_ID}/albums?include_groups=album,single&limit=20&market=NL`,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    }
-  );
-  if (!res.ok) throw new Error('Spotify albums failed');
-  const data = await res.json();
-  const items = (data.items || []) as SpotifyAlbum[];
+  // Pagineer door alle releases (max 50 per call)
+  let items: SpotifyAlbum[] = [];
+  let offset = 0;
+  while (true) {
+    const res = await fetch(
+      `https://api.spotify.com/v1/artists/${TONI_ARTIST_ID}/albums?include_groups=album,single&limit=50&offset=${offset}&market=NL`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    if (!res.ok) throw new Error('Spotify albums failed');
+    const data = await res.json();
+    const page = (data.items || []) as SpotifyAlbum[];
+    items = items.concat(page);
+    if (!data.next || page.length === 0) break;
+    offset += 50;
+  }
   const sorted = items
     .slice()
     .sort((a, b) => new Date(b.release_date).getTime() - new Date(a.release_date).getTime());
-  return sorted.slice(0, 5).map((a) => ({
+  return sorted.map((a) => ({
     name: a.name,
     image: a.images?.[0]?.url || '',
     url: a.external_urls?.spotify || `https://open.spotify.com/artist/${TONI_ARTIST_ID}`,

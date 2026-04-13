@@ -578,7 +578,7 @@ main,
 
 @keyframes carousel-scroll {
   0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  100% { transform: translateX(calc(-100% / var(--carousel-repeat, 4))); }
 }
 
 .release-card {

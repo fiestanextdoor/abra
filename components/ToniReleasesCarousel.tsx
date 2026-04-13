@@ -73,8 +73,12 @@ export function ToniReleasesCarousel({ introComplete }: ToniReleasesCarouselProp
       .finally(() => setLoading(false));
   }, []);
 
-  // Duplicate so the carousel loops seamlessly
-  const track = releases.length > 0 ? [...releases, ...releases] : [];
+  // Genoeg kopieën maken zodat de track altijd de viewport ruim overstijgt.
+  // Minimaal 4 sets zodat de loop bij weinig releases alsnog vloeiend is.
+  const REPEAT = Math.max(4, Math.ceil(16 / (releases.length || 1)));
+  const track = releases.length > 0
+    ? Array.from({ length: REPEAT }, () => releases).flat()
+    : [];
 
   return (
     <section
@@ -108,7 +112,10 @@ export function ToniReleasesCarousel({ introComplete }: ToniReleasesCarouselProp
         <p className="releases-loading">geen releases gevonden.</p>
       ) : (
         <div className="releases-carousel-wrapper">
-          <div className="releases-carousel-track">
+          <div
+            className="releases-carousel-track"
+            style={{ '--carousel-repeat': REPEAT } as React.CSSProperties}
+          >
             {track.map((release, i) => (
               <ReleaseCard key={`${release.name}-${i}`} release={release} />
             ))}
