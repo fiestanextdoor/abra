@@ -21,7 +21,7 @@ export async function GET() {
 
   if (!clientId || !clientSecret) {
     return NextResponse.json(getFallbackArtists(), {
-      headers: { 'Cache-Control': 'public, s-maxage=3600' },
+      headers: { 'Cache-Control': 'no-store' },
     });
   }
 
@@ -29,7 +29,7 @@ export async function GET() {
     const token = await getSpotifyToken(clientId, clientSecret);
     const artists = await fetchArtists(token);
     return NextResponse.json(artists, {
-      headers: { 'Cache-Control': 'public, s-maxage=3600' },
+      headers: { 'Cache-Control': 'no-store' },
     });
   } catch (e) {
     console.error('Spotify API error:', e);
@@ -47,6 +47,7 @@ async function getSpotifyToken(clientId: string, clientSecret: string): Promise<
       Authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`,
     },
     body: 'grant_type=client_credentials',
+    cache: 'no-store',
   });
   if (!res.ok) throw new Error('Spotify token failed');
   const data = await res.json();
@@ -59,6 +60,7 @@ async function fetchArtists(token: string): Promise<
   const ids = ARTIST_IDS.join(',');
   const res = await fetch(`https://api.spotify.com/v1/artists?ids=${ids}`, {
     headers: { Authorization: `Bearer ${token}` },
+    cache: 'no-store',
   });
   if (!res.ok) throw new Error('Spotify artists failed');
   const data = await res.json();

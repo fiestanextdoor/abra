@@ -50,32 +50,42 @@ export async function GET() {
     });
   }
 
-  // Stap 3: haal één artiest op als test
+  const ARTIST_IDS = [
+    '1tE9LhdFz72nhlipsg1ea9',
+    '5NcvBSEJrkWS2Gpng3Vj6w',
+    '0jFWofJtib9hQ6h6dFgzhk',
+  ];
+
+  // Stap 3: batch-aanroep (exact zoals getArtists() dit doet)
   try {
     const res = await fetch(
-      'https://api.spotify.com/v1/artists/1tE9LhdFz72nhlipsg1ea9',
+      `https://api.spotify.com/v1/artists?ids=${ARTIST_IDS.join(',')}`,
       { headers: { Authorization: `Bearer ${token}` }, cache: 'no-store' }
     );
     if (!res.ok) {
       return NextResponse.json({
         ok: false,
-        step: 'artist_fetch',
+        step: 'batch_fetch',
         status: res.status,
-        message: `Spotify artist-aanvraag mislukt (HTTP ${res.status}).`,
+        message: `Spotify batch-aanvraag mislukt (HTTP ${res.status}).`,
       });
     }
-    const artist = await res.json();
+    const data = await res.json();
+    const artists = (data.artists || []).map((a: { name: string; images?: { url: string }[] }) => ({
+      name: a.name,
+      image: a.images?.[0]?.url ?? '',
+      hasImage: !!(a.images?.[0]?.url),
+    }));
     return NextResponse.json({
       ok: true,
       message: 'Spotify werkt correct.',
-      artist: artist.name,
-      image: artist.images?.[0]?.url ?? 'geen afbeelding',
+      artists,
     });
   } catch (e) {
     return NextResponse.json({
       ok: false,
-      step: 'artist_fetch',
-      message: 'Netwerkfout bij ophalen artiest.',
+      step: 'batch_fetch',
+      message: 'Netwerkfout bij ophalen artiesten.',
       error: String(e),
     });
   }
