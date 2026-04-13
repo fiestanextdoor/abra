@@ -50,52 +50,33 @@ export async function GET() {
     });
   }
 
-  const ARTIST_IDS = [
-    '1tE9LhdFz72nhlipsg1ea9',
-    '5NcvBSEJrkWS2Gpng3Vj6w',
-    '0jFWofJtib9hQ6h6dFgzhk',
-  ];
+  const TONI_ID = '1tE9LhdFz72nhlipsg1ea9';
 
-  // Stap 3: batch-aanroep (exact zoals getArtists() dit doet)
-  try {
-    const res = await fetch(
-      `https://api.spotify.com/v1/artists?ids=${ARTIST_IDS.join(',')}`,
-      { headers: { Authorization: `Bearer ${token}` }, cache: 'no-store' }
-    );
-    if (!res.ok) {
-      return NextResponse.json({
-        ok: false,
-        step: 'batch_fetch',
-        status: res.status,
-        message: `Spotify batch-aanvraag mislukt (HTTP ${res.status}).`,
-      });
-    }
-    const data = await res.json();
-    const artists = (data.artists || []).map((a: { name: string; images?: { url: string }[] }) => ({
+  // Stap 3: albums endpoint zonder market
+  const albumsNoMarket = await fetch(
+    `https://api.spotify.com/v1/artists/${TONI_ID}/albums?include_groups=album,single&limit=3`,
+    { headers: { Authorization: `Bearer ${token}` }, cache: 'no-store' }
+  );
+
+  // Stap 4: albums endpoint met market=NL
+  const albumsWithMarket = await fetch(
+    `https://api.spotify.com/v1/artists/${TONI_ID}/albums?include_groups=album,single&limit=3&market=NL`,
+    { headers: { Authorization: `Bearer ${token}` }, cache: 'no-store' }
+  );
+
+  let albumSample: { name: string; image: string }[] = [];
+  const workingAlbumsRes = albumsNoMarket.ok ? albumsNoMarket : albumsWithMarket;
+  if (workingAlbumsRes.ok) {
+    const data = await workingAlbumsRes.json();
+    albumSample = (data.items || []).slice(0, 3).map((a: { name: string; images?: { url: string }[] }) => ({
       name: a.name,
       image: a.images?.[0]?.url ?? '',
-      hasImage: !!(a.images?.[0]?.url),
     }));
-
-    // Stap 4: test albums endpoint (voor de releases carousel)
-    const albumsRes = await fetch(
-      `https://api.spotify.com/v1/artists/1tE9LhdFz72nhlipsg1ea9/albums?include_groups=album,single&limit=5&market=NL`,
-      { headers: { Authorization: `Bearer ${token}` }, cache: 'no-store' }
-    );
-
-    return NextResponse.json({
-      ok: true,
-      message: 'Spotify batch werkt correct.',
-      artists,
-      albums_status: albumsRes.status,
-      albums_ok: albumsRes.ok,
-    });
-  } catch (e) {
-    return NextResponse.json({
-      ok: false,
-      step: 'batch_fetch',
-      message: 'Netwerkfout bij ophalen artiesten.',
-      error: String(e),
-    });
   }
+
+  return NextResponse.json({
+    albums_no_market_status: albumsNoMarket.status,
+    albums_with_market_status: albumsWithMarket.status,
+    album_sample: albumSample,
+  });
 }
