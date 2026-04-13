@@ -30,9 +30,10 @@ export async function GET() {
     });
   } catch (e) {
     console.error('Spotify API error:', e);
-    return NextResponse.json(getFallbackReleases(), {
-      headers: { 'Cache-Control': 'no-store' },
-    });
+    return NextResponse.json(
+      { error: String(e), fallback: getFallbackReleases() },
+      { headers: { 'Cache-Control': 'no-store' } }
+    );
   }
 }
 
