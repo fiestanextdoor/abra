@@ -62,15 +62,17 @@ async function fetchToniReleases(token: string): Promise<
   ];
 
   let firstRes: Response | null = null;
+  const attemptStatuses: number[] = [];
   for (const url of urls) {
     const res = await fetch(url, {
       headers: { Authorization: `Bearer ${token}` },
       cache: 'no-store',
     });
+    attemptStatuses.push(res.status);
     if (res.ok) { firstRes = res; break; }
   }
 
-  if (!firstRes) throw new Error('Spotify albums failed on all attempts');
+  if (!firstRes) throw new Error(`Spotify albums failed. Token length: ${token?.length ?? 0}. Statuses: ${attemptStatuses.join(', ')}`);
 
   // Pagineer door alle releases
   let items: SpotifyAlbum[] = [];
