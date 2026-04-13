@@ -55,24 +55,17 @@ async function getSpotifyToken(clientId: string, clientSecret: string): Promise<
 async function fetchToniReleases(token: string): Promise<
   { name: string; image: string; url: string; release_date: string; artists: string[] }[]
 > {
-  // Probeer eerst met market=NL, dan zonder — sommige omgevingen geven 403 met market-param.
-  const urls = [
-    `https://api.spotify.com/v1/artists/${TONI_ARTIST_ID}/albums?include_groups=album,single&limit=50&offset=0`,
-    `https://api.spotify.com/v1/artists/${TONI_ARTIST_ID}/albums?include_groups=album,single&limit=50&offset=0&market=NL`,
-  ];
+  // Bouw de URL via URLSearchParams zodat de komma in include_groups correct als %2C encoded wordt.
+  const albumsUrl = new URL(`https://api.spotify.com/v1/artists/${TONI_ARTIST_ID}/albums`);
+  albumsUrl.searchParams.set('include_groups', 'album,single');
+  albumsUrl.searchParams.set('limit', '50');
 
-  let firstRes: Response | null = null;
-  const attemptStatuses: number[] = [];
-  for (const url of urls) {
-    const res = await fetch(url, {
-      headers: { Authorization: `Bearer ${token}` },
-      cache: 'no-store',
-    });
-    attemptStatuses.push(res.status);
-    if (res.ok) { firstRes = res; break; }
-  }
+  const firstRes = await fetch(albumsUrl.toString(), {
+    headers: { Authorization: `Bearer ${token}` },
+    cache: 'no-store',
+  });
 
-  if (!firstRes) throw new Error(`Spotify albums failed. Token length: ${token?.length ?? 0}. Statuses: ${attemptStatuses.join(', ')}`);
+  if (!firstRes.ok) throw new Error(`Spotify albums failed. Status: ${firstRes.status}`);
 
   // Pagineer door alle releases
   let items: SpotifyAlbum[] = [];
