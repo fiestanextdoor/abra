@@ -25,6 +25,7 @@ async function getToken(): Promise<string | null> {
       Authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`,
     },
     body: 'grant_type=client_credentials',
+    cache: 'no-store',
   });
   if (!res.ok) return null;
   const data = await res.json();
@@ -39,6 +40,7 @@ export async function getArtists(): Promise<ArtistData[]> {
   try {
     const res = await fetch(`https://api.spotify.com/v1/artists?ids=${ARTIST_IDS.join(',')}`, {
       headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-store',
     });
     if (!res.ok) return getFallbackArtists();
     const data = await res.json();

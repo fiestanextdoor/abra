@@ -15,10 +15,10 @@ export function Hero({ introComplete }: HeroProps) {
         animate={introComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 28 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
-        {/* Light blue logo PNG as main hero element */}
+        {/* SVG logo for crisp rendering at any size */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/Logo AE blauw png '26.png"
+          src="/logo-ae-blauw.svg"
           alt="Abra Entertainment"
           className="hero-main-logo"
         />

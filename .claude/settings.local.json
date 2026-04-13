@@ -4,7 +4,11 @@
       "Bash(find C:/Users/joepa -name *.md -path *obsidian*)",
       "Bash(npx tsc:*)",
       "Bash(npx next:*)",
-      "Bash(identify \"C:/Users/joepa/OneDrive - Summacollege O365/School/Abraentertainment/public/Logo AE blauw png '26.png\")"
+      "Bash(identify \"C:/Users/joepa/OneDrive - Summacollege O365/School/Abraentertainment/public/Logo AE blauw png '26.png\")",
+      "Bash(cp \"C:\\\\Users\\\\joepa\\\\Downloads\\\\Huisstijl 2026 Abra Entertainment\\\\Huisstijl 2026 Abra Entertainment\\\\PNG's '26\\\\Logo AE creme png '26.png\" \"C:\\\\Users\\\\joepa\\\\OneDrive - Summacollege O365\\\\School\\\\Abraentertainment\\\\public\\\\Logo AE creme png '26.png\")",
+      "Bash(cp \"C:\\\\Users\\\\joepa\\\\Downloads\\\\Huisstijl 2026 Abra Entertainment\\\\Huisstijl 2026 Abra Entertainment\\\\PNG's '26\\\\Logo AE blauw png '26.png\" \"C:\\\\Users\\\\joepa\\\\OneDrive - Summacollege O365\\\\School\\\\Abraentertainment\\\\public\\\\Logo AE blauw png '26.png\")",
+      "Bash(cp \"C:\\\\Users\\\\joepa\\\\Downloads\\\\Huisstijl 2026 Abra Entertainment\\\\Huisstijl 2026 Abra Entertainment\\\\PNG's '26\\\\Logo AE zwart png '26.png\" \"C:\\\\Users\\\\joepa\\\\OneDrive - Summacollege O365\\\\School\\\\Abraentertainment\\\\public\\\\Logo AE zwart png '26.png\")",
+      "Bash(cp \"C:\\\\Users\\\\joepa\\\\Downloads\\\\Huisstijl 2026 Abra Entertainment\\\\Huisstijl 2026 Abra Entertainment\\\\PNG's '26\\\\Sitefooter AE.png\" \"C:\\\\Users\\\\joepa\\\\OneDrive - Summacollege O365\\\\School\\\\Abraentertainment\\\\public\\\\Sitefooter AE.png\")"
     ]
   }
 }

@@ -14,7 +14,7 @@ export function Header() {
         {/* Cream logo on light-blue header */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/Logo AE creme png '26.png"
+          src="/logo-ae-creme.svg"
           alt="Abra Entertainment"
           className="header-logo-img"
         />

@@ -92,8 +92,11 @@ body {
   color: var(--ae-blue);
   font-family: var(--font-body);
   font-style: italic;
-  line-height: 1.65;
+  font-size: 1rem;
+  line-height: 1.8;
+  letter-spacing: 0.02em;
   overflow-x: hidden;
+  overscroll-behavior: none;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -158,16 +161,14 @@ h1, h2, h3, h4 {
   z-index: 100;
   display: grid;
   place-items: center;
-  background: var(--ae-deep);
+  background: var(--ae-blue);
   pointer-events: auto;
 }
 
 .intro-splash-logo {
-  color: var(--ae-cream);
-  font-family: var(--font-display);
-  font-size: clamp(8rem, 25vw, 18rem);
-  line-height: 0.9;
-  text-transform: lowercase;
+  width: clamp(200px, 50vw, 480px);
+  height: auto;
+  display: block;
 }
 
 /* ============================================================
@@ -230,13 +231,13 @@ main,
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.2rem 2.5rem;
+  padding: 2rem 2.5rem;
   background: var(--ae-blue);
   transition: background 0.3s ease;
 }
 
 .header-logo-img {
-  height: 30px;
+  height: 52px;
   width: auto;
   display: block;
   transition: opacity 0.25s ease;
@@ -253,9 +254,9 @@ main,
 }
 
 .header-nav-link {
-  font-family: var(--font-display);
-  font-style: normal;
-  font-size: 1rem;
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1.25rem;
   color: var(--ae-cream);
   text-transform: lowercase;
   position: relative;
@@ -287,8 +288,9 @@ main,
   display: none;
   background: none;
   border: none;
-  font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1.25rem;
   color: var(--ae-cream);
 }
 
@@ -302,7 +304,7 @@ main,
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 8rem 2.5rem 6rem;
+  padding: 10rem 2.5rem 6rem;
   position: relative;
   overflow: hidden;
 }
@@ -336,10 +338,10 @@ main,
   display: inline-block;
   border: 1px solid var(--ae-blue);
   color: var(--ae-blue);
-  padding: 0.9rem 2.6rem;
+  padding: 1.2rem 3.5rem;
   font-family: var(--font-body);
-  font-style: normal;
-  font-size: 0.7rem;
+  font-style: italic;
+  font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.22em;
   transition: background 0.4s ease, color 0.4s ease;
@@ -441,7 +443,8 @@ main,
 }
 
 .artist-initial {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
+  font-style: italic;
   font-size: 7rem;
   text-transform: uppercase;
   color: var(--ae-cream);
@@ -464,6 +467,9 @@ main,
 
 .artist-name {
   /* uppercase text via CSS, but AREnD keeps its casing from component */
+  font-family: var(--font-body);
+  font-style: italic;
+  font-weight: normal;
   font-size: clamp(1.8rem, 3.2vw, 3.2rem);
   color: var(--ae-cream);
   line-height: 0.92;
@@ -487,10 +493,10 @@ main,
 .artist-description {
   font-family: var(--font-body);
   font-style: italic;
-  font-size: 0.82rem;
-  color: rgba(233, 229, 220, 0.72);
-  line-height: 1.5;
-  margin-bottom: 0.5rem;
+  font-size: 1.05rem;
+  color: rgba(233, 229, 220, 0.82);
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -499,11 +505,11 @@ main,
 
 .artist-spotify-link {
   font-family: var(--font-body);
-  font-style: normal;
-  font-size: 0.68rem;
+  font-style: italic;
+  font-size: 0.95rem;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  color: rgba(233, 229, 220, 0.55);
+  color: rgba(233, 229, 220, 0.65);
   transition: color 0.25s ease;
 }
 
@@ -642,22 +648,22 @@ main,
 }
 
 .release-title {
-  font-family: var(--font-display);
-  font-size: 1.05rem;
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1.2rem;
   color: var(--ae-blue);
   text-transform: lowercase;
-  font-style: normal;
-  line-height: 1.1;
+  line-height: 1.2;
 }
 
 .release-artist-date {
   font-family: var(--font-body);
-  font-style: normal;
-  font-size: 0.65rem;
+  font-style: italic;
+  font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.18em;
   color: var(--ae-blue);
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 .releases-loading {
@@ -679,7 +685,8 @@ main,
   position: relative;
   width: 100%;
   height: clamp(440px, 60vh, 720px);
-  background: var(--ae-dark);
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -694,8 +701,8 @@ main,
   width: 65%;
   max-width: 560px;
   height: auto;
-  opacity: 0.07;
-  filter: invert(1);
+  opacity: 0.04;
+  filter: none;
   pointer-events: none;
   display: block;
 }
@@ -712,17 +719,17 @@ main,
 
 .shop-label {
   font-family: var(--font-body);
-  font-style: normal;
-  font-size: 0.68rem;
+  font-style: italic;
+  font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.45em;
-  color: rgba(233, 229, 220, 0.45);
+  color: rgba(0, 0, 0, 0.45);
 }
 
 .shop-heading {
   font-family: var(--font-display);
   font-size: clamp(3.5rem, 8vw, 8rem);
-  color: var(--ae-cream);
+  color: #000000;
   text-transform: lowercase;
   line-height: 0.9;
 }
@@ -730,12 +737,12 @@ main,
 .shop-cta {
   margin-top: 0.5rem;
   display: inline-block;
-  background: var(--ae-cream);
-  color: var(--ae-dark);
-  padding: 1rem 3rem;
+  background: #000000;
+  color: #ffffff;
+  padding: 1.3rem 4rem;
   font-family: var(--font-body);
-  font-style: normal;
-  font-size: 0.7rem;
+  font-style: italic;
+  font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.2em;
   transition: opacity 0.3s ease;
@@ -781,7 +788,8 @@ main,
   gap: 1.1rem;
   color: var(--ae-blue);
   opacity: 0.65;
-  font-family: var(--font-display);
+  font-family: var(--font-body);
+  font-style: italic;
   font-size: 1.15rem;
   text-transform: lowercase;
   transition: opacity 0.25s ease;
@@ -880,8 +888,8 @@ main,
    FOOTER  — beige background, no wordmark text
    ============================================================ */
 .footer {
-  background: var(--ae-cream);
-  padding: 4rem 2.5rem 2rem;
+  background: var(--ae-white);
+  padding: 2rem 2.5rem;
   position: relative;
   z-index: 2;
 }
@@ -889,7 +897,8 @@ main,
 .footer-nav-row {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 3rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
 }
 
 .footer-nav-col {
@@ -910,8 +919,9 @@ main,
 }
 
 .footer-nav-link {
-  font-family: var(--font-display);
-  font-size: 1.05rem;
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1.25rem;
   color: var(--ae-blue);
   text-transform: lowercase;
   opacity: 0.7;
@@ -923,13 +933,13 @@ main,
 }
 
 .footer-logo-wrap {
-  padding: 2rem 0 2.5rem;
+  padding: 1rem 0 1rem;
 }
 
 .footer-logo-img {
-  height: clamp(44px, 7vw, 80px);
+  height: 52px;
   width: auto;
-  opacity: 0.35;
+  opacity: 0.5;
 }
 
 .footer-bottom {
@@ -975,7 +985,7 @@ main,
    SUBPAGES
    ============================================================ */
 .subpage {
-  padding-top: 5.5rem;
+  padding-top: 7rem;
   background: var(--ae-cream);
 }
 
@@ -1058,7 +1068,7 @@ main,
    ============================================================ */
 @media (max-width: 900px) {
   .site-header {
-    padding: 1rem 1.4rem;
+    padding: 1.5rem 1.4rem;
   }
 
   .header-nav {
@@ -1105,7 +1115,7 @@ main,
   }
 
   .footer {
-    padding: 3rem 1.4rem 1.5rem;
+    padding: 1.5rem 1.4rem;
   }
 
   .releases-inner-header {

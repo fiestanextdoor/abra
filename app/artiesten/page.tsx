@@ -3,6 +3,8 @@ import { Artists } from '@/components/Artists';
 import { Footer } from '@/components/Footer';
 import { getArtists } from '@/lib/spotify';
 
+export const dynamic = 'force-dynamic';
+
 export default async function ArtiestenPage() {
   const artists = await getArtists();
 

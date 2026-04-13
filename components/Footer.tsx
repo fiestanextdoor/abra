@@ -57,7 +57,7 @@ export function Footer() {
       <div className="footer-logo-wrap">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/Sitefooter AE.png"
+          src="/logo-ae-blauw.svg"
           alt="Abra Entertainment"
           className="footer-logo-img"
         />
