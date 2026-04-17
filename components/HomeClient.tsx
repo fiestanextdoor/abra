@@ -6,6 +6,7 @@ import { Hero } from '@/components/Hero';
 import { Artists } from '@/components/Artists';
 import { ToniReleasesCarousel } from '@/components/ToniReleasesCarousel';
 import { Shop } from '@/components/Shop';
+import { Contact } from '@/components/Contact';
 import { Footer } from '@/components/Footer';
 import { IntroSplash } from '@/components/IntroSplash';
 
@@ -32,6 +33,7 @@ export function HomeClient({ artists }: HomeClientProps) {
       <Artists initialArtists={artists} introComplete={introComplete} />
       <ToniReleasesCarousel introComplete={introComplete} />
       <Shop />
+      <Contact introComplete={introComplete} />
       <Footer />
     </main>
   );

@@ -884,47 +884,61 @@ main,
   opacity: 0.8;
 }
 
+.contact-submit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.contact-feedback {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.contact-feedback--success {
+  color: var(--ae-blue);
+}
+
+.contact-feedback--error {
+  color: #b94a4a;
+}
+
 /* ============================================================
    FOOTER  — beige background, no wordmark text
    ============================================================ */
 .footer {
-  background: var(--ae-white);
-  padding: 2rem 2.5rem;
+  background: var(--ae-blue);
+  padding: 2.5rem 2.5rem 2rem;
   position: relative;
   z-index: 2;
 }
 
-.footer-nav-row {
+.footer-main-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-.footer-nav-col {
+.footer-logo-img {
+  height: 48px;
+  width: auto;
+  opacity: 0.9;
+}
+
+.footer-nav {
   display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-}
-
-.footer-nav-label {
-  font-family: var(--font-body);
-  font-style: normal;
-  font-size: 0.63rem;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--ae-blue);
-  opacity: 0.4;
-  margin-bottom: 0.2rem;
+  gap: 2.5rem;
+  align-items: center;
 }
 
 .footer-nav-link {
   font-family: var(--font-body);
   font-style: italic;
-  font-size: 1.25rem;
-  color: var(--ae-blue);
+  font-size: 1.1rem;
+  color: #ffffff;
   text-transform: lowercase;
-  opacity: 0.7;
+  opacity: 0.65;
   transition: opacity 0.25s ease;
 }
 
@@ -932,18 +946,8 @@ main,
   opacity: 1;
 }
 
-.footer-logo-wrap {
-  padding: 1rem 0 1rem;
-}
-
-.footer-logo-img {
-  height: 52px;
-  width: auto;
-  opacity: 0.5;
-}
-
 .footer-bottom {
-  border-top: 1px solid rgba(150, 181, 209, 0.25);
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
   padding-top: 1.5rem;
   display: flex;
   justify-content: space-between;
@@ -957,8 +961,8 @@ main,
   font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: var(--ae-blue);
-  opacity: 0.4;
+  color: #ffffff;
+  opacity: 0.35;
 }
 
 .footer-legal-links {
@@ -972,13 +976,13 @@ main,
   font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: var(--ae-blue);
-  opacity: 0.4;
+  color: #ffffff;
+  opacity: 0.35;
   transition: opacity 0.25s ease;
 }
 
 .footer-legal-link:hover {
-  opacity: 0.8;
+  opacity: 0.7;
 }
 
 /* ============================================================
@@ -1116,6 +1120,16 @@ main,
 
   .footer {
     padding: 1.5rem 1.4rem;
+  }
+
+  .footer-main-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .footer-nav {
+    gap: 1.5rem;
   }
 
   .releases-inner-header {

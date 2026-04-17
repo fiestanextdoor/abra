@@ -14,7 +14,9 @@
       "Bash(npm run *)",
       "Bash(curl -s \"http://localhost:3000/api/toni-releases\")",
       "Bash(curl -s -X POST https://accounts.spotify.com/api/token -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=client_credentials&client_id=cf24fdb7d7e34ced90b5caa3aea3286b&client_secret=397d4b30237b405094fe03e5dea71181')",
-      "Bash(curl -s \"http://localhost:3000/api/toni-releases\" -v)"
+      "Bash(curl -s \"http://localhost:3000/api/toni-releases\" -v)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:3000/\")",
+      "Bash(curl *)"
     ]
   }
 }

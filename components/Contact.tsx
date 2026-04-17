@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 
 const EMAIL = 'toonvandersluis@gmail.com';
 
@@ -25,6 +26,33 @@ function SpotifyIcon() {
 }
 
 export function Contact({ introComplete }: ContactProps) {
+  const [naam, setNaam] = useState('');
+  const [email, setEmail] = useState('');
+  const [bericht, setBericht] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setStatus('loading');
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ naam, email, bericht }),
+      });
+
+      if (!res.ok) throw new Error('failed');
+
+      setStatus('success');
+      setNaam('');
+      setEmail('');
+      setBericht('');
+    } catch {
+      setStatus('error');
+    }
+  }
+
   return (
     <motion.section
       id="contact"
@@ -72,10 +100,7 @@ export function Contact({ introComplete }: ContactProps) {
       </div>
 
       {/* Right column — form */}
-      <form
-        className="contact-form"
-        onSubmit={(e) => e.preventDefault()}
-      >
+      <form className="contact-form" onSubmit={handleSubmit} noValidate>
         <div className="contact-field">
           <label htmlFor="contact-naam">naam</label>
           <input
@@ -84,6 +109,10 @@ export function Contact({ introComplete }: ContactProps) {
             placeholder="jouw naam"
             className="contact-input"
             autoComplete="name"
+            required
+            value={naam}
+            onChange={(e) => setNaam(e.target.value)}
+            disabled={status === 'loading' || status === 'success'}
           />
         </div>
 
@@ -95,6 +124,10 @@ export function Contact({ introComplete }: ContactProps) {
             placeholder="email@adres.nl"
             className="contact-input"
             autoComplete="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={status === 'loading' || status === 'success'}
           />
         </div>
 
@@ -105,12 +138,34 @@ export function Contact({ introComplete }: ContactProps) {
             placeholder="vertel ons iets..."
             className="contact-textarea"
             rows={5}
+            required
+            value={bericht}
+            onChange={(e) => setBericht(e.target.value)}
+            disabled={status === 'loading' || status === 'success'}
           />
         </div>
 
-        <button type="submit" className="contact-submit">
-          verstuur
-        </button>
+        {status === 'success' && (
+          <p className="contact-feedback contact-feedback--success">
+            bericht verstuurd, we nemen snel contact op.
+          </p>
+        )}
+        {status === 'error' && (
+          <p className="contact-feedback contact-feedback--error">
+            er ging iets mis, probeer het opnieuw.
+          </p>
+        )}
+
+        {status !== 'success' && (
+          <button
+            type="submit"
+            className="contact-submit"
+            disabled={status === 'loading'}
+            aria-busy={status === 'loading'}
+          >
+            {status === 'loading' ? 'versturen...' : 'verstuur'}
+          </button>
+        )}
       </form>
     </motion.section>
   );
