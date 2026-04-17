@@ -55,11 +55,12 @@ async function fetchToniReleases(token: string): Promise<
   { name: string; image: string; url: string; release_date: string; artists: string[] }[]
 > {
   let items: SpotifyAlbum[] = [];
-  let nextUrl: string | null =
-    `https://api.spotify.com/v1/artists/${TONI_ARTIST_ID}/albums?include_groups=single`;
+  const firstUrl = `https://api.spotify.com/v1/artists/${TONI_ARTIST_ID}/albums?include_groups=single`;
+  let nextUrl: string | null = firstUrl;
 
   while (nextUrl) {
-    const res = await fetch(nextUrl, {
+    const url: string = nextUrl;
+    const res: Response = await fetch(url, {
       headers: { Authorization: `Bearer ${token}` },
       cache: 'no-store',
     });
