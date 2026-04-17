@@ -8,7 +8,13 @@
       "Bash(cp \"C:\\\\Users\\\\joepa\\\\Downloads\\\\Huisstijl 2026 Abra Entertainment\\\\Huisstijl 2026 Abra Entertainment\\\\PNG's '26\\\\Logo AE creme png '26.png\" \"C:\\\\Users\\\\joepa\\\\OneDrive - Summacollege O365\\\\School\\\\Abraentertainment\\\\public\\\\Logo AE creme png '26.png\")",
       "Bash(cp \"C:\\\\Users\\\\joepa\\\\Downloads\\\\Huisstijl 2026 Abra Entertainment\\\\Huisstijl 2026 Abra Entertainment\\\\PNG's '26\\\\Logo AE blauw png '26.png\" \"C:\\\\Users\\\\joepa\\\\OneDrive - Summacollege O365\\\\School\\\\Abraentertainment\\\\public\\\\Logo AE blauw png '26.png\")",
       "Bash(cp \"C:\\\\Users\\\\joepa\\\\Downloads\\\\Huisstijl 2026 Abra Entertainment\\\\Huisstijl 2026 Abra Entertainment\\\\PNG's '26\\\\Logo AE zwart png '26.png\" \"C:\\\\Users\\\\joepa\\\\OneDrive - Summacollege O365\\\\School\\\\Abraentertainment\\\\public\\\\Logo AE zwart png '26.png\")",
-      "Bash(cp \"C:\\\\Users\\\\joepa\\\\Downloads\\\\Huisstijl 2026 Abra Entertainment\\\\Huisstijl 2026 Abra Entertainment\\\\PNG's '26\\\\Sitefooter AE.png\" \"C:\\\\Users\\\\joepa\\\\OneDrive - Summacollege O365\\\\School\\\\Abraentertainment\\\\public\\\\Sitefooter AE.png\")"
+      "Bash(cp \"C:\\\\Users\\\\joepa\\\\Downloads\\\\Huisstijl 2026 Abra Entertainment\\\\Huisstijl 2026 Abra Entertainment\\\\PNG's '26\\\\Sitefooter AE.png\" \"C:\\\\Users\\\\joepa\\\\OneDrive - Summacollege O365\\\\School\\\\Abraentertainment\\\\public\\\\Sitefooter AE.png\")",
+      "Bash(curl -s 'https://api.spotify.com/v1/artists/1tE9LhdFz72nhlipsg1ea9/albums?include_groups=single&limit=10' -H 'Authorization: Bearer BQDRBAENQirVsSbbdnRvvXUUTTd6aE_aIDkMf2E2fHUM1KwLo4Nm8PY46XyoMD_UBoDcKlzuvqnMLitnnRDAyuXvaqgESdd2jwkTUs5ngnAomm3CFvaFrut6O0AQ7xs1l7uIgOm70g8')",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); [print\\(i['name'], '|', i['release_date'], '|', i['images'][0]['url'] if i['images'] else 'no-img'\\) for i in d.get\\('items',[]\\)]\")",
+      "Bash(npm run *)",
+      "Bash(curl -s \"http://localhost:3000/api/toni-releases\")",
+      "Bash(curl -s -X POST https://accounts.spotify.com/api/token -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=client_credentials&client_id=cf24fdb7d7e34ced90b5caa3aea3286b&client_secret=397d4b30237b405094fe03e5dea71181')",
+      "Bash(curl -s \"http://localhost:3000/api/toni-releases\" -v)"
     ]
   }
 }

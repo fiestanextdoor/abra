@@ -30,10 +30,9 @@ export async function GET() {
     });
   } catch (e) {
     console.error('Spotify API error:', e);
-    return NextResponse.json(
-      { error: String(e), fallback: getFallbackReleases() },
-      { headers: { 'Cache-Control': 'no-store' } }
-    );
+    return NextResponse.json(getFallbackReleases(), {
+      headers: { 'Cache-Control': 'no-store' },
+    });
   }
 }
 
@@ -55,30 +54,19 @@ async function getSpotifyToken(clientId: string, clientSecret: string): Promise<
 async function fetchToniReleases(token: string): Promise<
   { name: string; image: string; url: string; release_date: string; artists: string[] }[]
 > {
-  // Bouw de URL via URLSearchParams zodat de komma in include_groups correct als %2C encoded wordt.
-  const albumsUrl = new URL(`https://api.spotify.com/v1/artists/${TONI_ARTIST_ID}/albums`);
-  albumsUrl.searchParams.set('include_groups', 'album,single');
-  albumsUrl.searchParams.set('limit', '50');
-
-  const firstRes = await fetch(albumsUrl.toString(), {
-    headers: { Authorization: `Bearer ${token}` },
-    cache: 'no-store',
-  });
-
-  if (!firstRes.ok) throw new Error(`Spotify albums failed. Status: ${firstRes.status}`);
-
-  // Pagineer door alle releases
   let items: SpotifyAlbum[] = [];
-  const firstData = await firstRes.json();
-  items = items.concat((firstData.items || []) as SpotifyAlbum[]);
+  let nextUrl: string | null =
+    `https://api.spotify.com/v1/artists/${TONI_ARTIST_ID}/albums?include_groups=single`;
 
-  let nextUrl: string | null = firstData.next ?? null;
   while (nextUrl) {
     const res = await fetch(nextUrl, {
       headers: { Authorization: `Bearer ${token}` },
       cache: 'no-store',
     });
-    if (!res.ok) break;
+    if (!res.ok) {
+      const body = await res.text();
+      throw new Error(`Spotify albums failed. Status: ${res.status}. Body: ${body}`);
+    }
     const data = await res.json();
     items = items.concat((data.items || []) as SpotifyAlbum[]);
     nextUrl = data.next ?? null;
