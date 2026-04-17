@@ -7,11 +7,10 @@ const ARTIST_IDS = [
 export type ArtistData = {
   id: string;
   name: string;
-  /** Profielfoto van de artiest op Spotify (images[0]) */
   image: string;
   spotifyUrl: string;
-  /** Genres van Spotify (API heeft geen bio, wel genres) */
   genres: string[];
+  latestRelease?: { name: string; url: string } | null;
 };
 
 async function getToken(): Promise<string | null> {
@@ -58,12 +57,24 @@ export async function getArtists(): Promise<ArtistData[]> {
           external_urls: { spotify: string };
           genres?: string[];
         };
+        const latestRes = await fetch(
+          `https://api.spotify.com/v1/artists/${a.id}/albums?include_groups=single&limit=1`,
+          { headers: { Authorization: `Bearer ${token}` }, cache: 'no-store' }
+        );
+        let latestRelease: { name: string; url: string } | null = null;
+        if (latestRes.ok) {
+          const latestData = await latestRes.json() as { items: { name: string; external_urls: { spotify: string } }[] };
+          const first = latestData.items?.[0];
+          if (first) latestRelease = { name: first.name, url: first.external_urls?.spotify ?? '' };
+        }
+
         return {
           id: a.id,
           name: a.name,
           image: a.images?.[0]?.url ?? '',
           spotifyUrl: a.external_urls?.spotify ?? `https://open.spotify.com/artist/${ARTIST_IDS[i]}`,
           genres: Array.isArray(a.genres) ? a.genres : [],
+          latestRelease,
         };
       })
     );

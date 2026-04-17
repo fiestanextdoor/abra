@@ -1029,6 +1029,212 @@ main,
 }
 
 /* ============================================================
+   ARTIST ROSTER PAGE
+   ============================================================ */
+.roster {
+  background: var(--ae-cream);
+  padding-top: 7rem;
+}
+
+.roster-header {
+  padding: 2.5rem 2.5rem 2.5rem;
+}
+
+.roster-header-label {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--ae-dark);
+  opacity: 0.45;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.roster-header-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 6.5rem);
+  color: var(--ae-blue);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+}
+
+/* Artist section */
+.roster-section {
+  display: grid;
+  grid-template-columns: 55% 45%;
+  height: calc(100vh - 9rem);
+  height: calc(100dvh - 9rem);
+  min-height: 440px;
+  border-top: 1px solid rgba(24, 43, 63, 0.08);
+}
+
+.roster-section--img-right {
+  grid-template-columns: 45% 55%;
+}
+
+/* Photo side */
+.roster-photo-wrap {
+  position: relative;
+  overflow: hidden;
+  background: var(--ae-dark);
+}
+
+.roster-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  filter: brightness(0.75) contrast(1.05);
+  transition: transform 0.6s ease, filter 0.6s ease;
+}
+
+.roster-photo-wrap:hover .roster-photo {
+  transform: scale(1.03);
+  filter: brightness(0.85) contrast(1.05);
+}
+
+.roster-photo-fallback {
+  width: 100%;
+  height: 100%;
+  background: var(--ae-blue);
+  opacity: 0.4;
+}
+
+.roster-name-overlay {
+  position: absolute;
+  bottom: 1.8rem;
+  left: 2rem;
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  color: #ffffff;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  pointer-events: none;
+}
+
+/* Text side */
+.roster-text {
+  padding: 4rem 3.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+  background: var(--ae-cream);
+}
+
+.roster-section--img-right .roster-text {
+  padding: 4rem 3.5rem 4rem 2.5rem;
+}
+
+.roster-quote {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: clamp(1rem, 1.8vw, 1.3rem);
+  color: var(--ae-blue-mid);
+  line-height: 1.55;
+  max-width: 36ch;
+}
+
+.roster-description {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: clamp(0.85rem, 1.2vw, 0.95rem);
+  color: var(--ae-dark);
+  line-height: 1.75;
+  max-width: 44ch;
+  opacity: 0.75;
+}
+
+.roster-latest {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  flex-wrap: wrap;
+}
+
+.roster-latest-label {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--ae-dark);
+  opacity: 0.45;
+}
+
+.roster-latest-line {
+  flex: 0 0 2.5rem;
+  height: 1px;
+  background: var(--ae-dark);
+  opacity: 0.25;
+}
+
+.roster-latest-title {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--ae-blue-mid);
+  transition: opacity 0.2s ease;
+}
+
+.roster-latest:hover .roster-latest-title {
+  opacity: 0.7;
+}
+
+.roster-links {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.roster-link {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--ae-dark);
+  opacity: 0.5;
+  transition: opacity 0.25s ease;
+  display: flex;
+  align-items: center;
+}
+
+.roster-link:hover {
+  opacity: 1;
+}
+
+.roster-icon {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .roster-section,
+  .roster-section--img-right {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: unset;
+  }
+
+  .roster-section--img-right .roster-photo-wrap {
+    order: -1;
+  }
+
+  .roster-text,
+  .roster-section--img-right .roster-text {
+    padding: 2.5rem 1.4rem;
+  }
+
+  .roster-name-overlay {
+    font-size: clamp(2.5rem, 10vw, 4rem);
+  }
+}
+
+/* ============================================================
    OVER PAGE
    ============================================================ */
 .over-page {
