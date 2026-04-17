@@ -1028,6 +1028,241 @@ main,
   padding-left: 1.2rem;
 }
 
+/* ============================================================
+   OVER PAGE
+   ============================================================ */
+.over-page {
+  padding-top: 7rem;
+  background: var(--ae-white);
+}
+
+/* Hero split */
+.over-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  min-height: 60vh;
+  align-items: stretch;
+  background: var(--ae-white);
+}
+
+.over-hero-left {
+  padding: 4rem 3.5rem 4rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.over-title {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  color: var(--ae-blue);
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+}
+
+.over-body {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: clamp(0.9rem, 1.4vw, 1.05rem);
+  color: var(--ae-blue);
+  line-height: 1.75;
+  max-width: 48ch;
+  opacity: 0.85;
+}
+
+.over-tagline {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--ae-blue);
+  line-height: 1.6;
+  max-width: 44ch;
+  opacity: 0.7;
+}
+
+.over-hero-right {
+  position: relative;
+  overflow: hidden;
+  background: var(--ae-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* CSS vinyl record */
+@keyframes vinyl-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.over-vinyl {
+  width: min(400px, 85%);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    #1a1a1a 0%,
+    #1a1a1a 8%,
+    transparent 8%,
+    transparent 10%,
+    #111 10%,
+    #222 16%,
+    #111 22%,
+    #1c1c1c 28%,
+    #111 34%,
+    #1c1c1c 40%,
+    #111 46%,
+    #1a1a1a 100%
+  );
+  box-shadow: 0 8px 48px rgba(0, 0, 0, 0.18);
+  position: relative;
+  animation: vinyl-spin 10s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .over-vinyl { animation: none; }
+}
+
+.over-vinyl-inner {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: repeating-radial-gradient(
+    circle at 50%,
+    transparent 0px,
+    transparent 4px,
+    rgba(255,255,255,0.025) 5px,
+    transparent 6px
+  );
+}
+
+.over-vinyl-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 28%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #1e1e1e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.07);
+}
+
+.over-vinyl-logo {
+  width: 70%;
+  height: auto;
+  opacity: 0.9;
+  filter: brightness(0) invert(1);
+}
+
+/* Values grid */
+.over-grid {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  grid-template-rows: auto auto;
+  margin-top: 5rem;
+}
+
+.over-tile {
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  min-height: 220px;
+}
+
+.over-tile-label {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  opacity: 0.5;
+}
+
+.over-tile-text {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3.2vw, 2.8rem);
+  line-height: 1.05;
+}
+
+.over-tile--cream {
+  background: var(--ae-cream);
+  border: 1px solid rgba(150,181,209,0.15);
+}
+.over-tile--cream .over-tile-label,
+.over-tile--cream .over-tile-text {
+  color: var(--ae-dark);
+}
+
+.over-tile--dark {
+  background: var(--ae-dark);
+}
+.over-tile--dark .over-tile-label {
+  color: rgba(255,255,255,0.45);
+}
+.over-tile--dark .over-tile-text {
+  color: #ffffff;
+}
+
+.over-tile-circle {
+  position: absolute;
+  bottom: -3rem;
+  right: -3rem;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
+}
+
+.over-tile--blue {
+  background: var(--ae-blue);
+}
+.over-tile--blue .over-tile-label {
+  color: rgba(255,255,255,0.6);
+}
+.over-tile--blue .over-tile-text {
+  color: #ffffff;
+  font-size: clamp(1.3rem, 2.5vw, 2.2rem);
+}
+
+.over-tile--white {
+  background: var(--ae-white);
+  border: 1px solid rgba(150,181,209,0.15);
+}
+.over-tile--white .over-tile-label,
+.over-tile--white .over-tile-text {
+  color: var(--ae-dark);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .over-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .over-hero-right {
+    min-height: 260px;
+  }
+
+  .over-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .over-hero-left {
+    padding: 3rem 1.4rem;
+  }
+}
+
 .join-cta {
   margin-top: 0.8rem;
   display: inline-block;
