@@ -5,7 +5,7 @@ function proxyImage(url: string): string {
   return `/api/image-proxy?url=${encodeURIComponent(url)}`;
 }
 
-const PLAYLIST_ID = '4SnTKgEMG91Jd8D1bahNiW';
+const TONI_ARTIST_ID = '1tE9LhdFz72nhlipsg1ea9';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,8 +21,6 @@ export async function GET() {
   const clientId = process.env.SPOTIFY_CLIENT_ID;
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 
-  console.log('[toni-releases] called, clientId present:', !!clientId, 'clientSecret present:', !!clientSecret);
-
   if (!clientId || !clientSecret) {
     console.error('[toni-releases] missing env vars');
     return NextResponse.json([], { headers: { 'Cache-Control': 'no-store' } });
@@ -30,8 +28,7 @@ export async function GET() {
 
   try {
     const token = await getSpotifyToken(clientId, clientSecret);
-    console.log('[toni-releases] token ok:', !!token);
-    const releases = await fetchPlaylistTracks(token);
+    const releases = await fetchArtistReleases(token);
     console.log('[toni-releases] releases count:', releases.length);
     return NextResponse.json(releases, { headers: { 'Cache-Control': 'no-store' } });
   } catch (e) {
@@ -55,10 +52,10 @@ async function getSpotifyToken(clientId: string, clientSecret: string): Promise<
   return data.access_token;
 }
 
-async function fetchPlaylistTracks(token: string): Promise<Release[]> {
+async function fetchArtistReleases(token: string): Promise<Release[]> {
   const releases: Release[] = [];
   let nextUrl: string | null =
-    `https://api.spotify.com/v1/playlists/${PLAYLIST_ID}/tracks?limit=50`;
+    `https://api.spotify.com/v1/artists/${TONI_ARTIST_ID}/albums?include_groups=single,album&limit=50&market=NL`;
 
   while (nextUrl) {
     const res = await fetch(nextUrl, {
@@ -67,26 +64,36 @@ async function fetchPlaylistTracks(token: string): Promise<Release[]> {
     });
     if (!res.ok) {
       const body = await res.text();
-      throw new Error(`Playlist fetch failed. Status: ${res.status}. Body: ${body}`);
+      throw new Error(`Artist albums fetch failed. Status: ${res.status}. Body: ${body}`);
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const data = await res.json() as any;
+    const data = await res.json() as {
+      items: {
+        id: string;
+        name: string;
+        images: { url: string }[];
+        external_urls: { spotify: string };
+        release_date: string;
+        artists: { name: string }[];
+        album_type: string;
+      }[];
+      next: string | null;
+    };
 
-    console.log('[toni-releases] playlist response status ok, items:', data.items?.length ?? 'none', 'next:', data.next);
-    for (const item of (data.items ?? [])) {
-      if (!item.track) continue;
-      const t = item.track;
+    for (const album of (data.items ?? [])) {
       releases.push({
-        name: t.name,
-        image: proxyImage(t.album?.images?.[0]?.url ?? ''),
-        url: t.external_urls?.spotify ?? '',
-        release_date: t.album?.release_date ?? '',
-        artists: t.artists?.map((a: { name: string }) => a.name) ?? [],
+        name: album.name,
+        image: proxyImage(album.images?.[0]?.url ?? ''),
+        url: album.external_urls?.spotify ?? '',
+        release_date: album.release_date ?? '',
+        artists: album.artists?.map((a) => a.name) ?? [],
       });
     }
 
     nextUrl = data.next ?? null;
   }
+
+  // Sorteer op release datum, nieuwste eerst
+  releases.sort((a, b) => b.release_date.localeCompare(a.release_date));
 
   return releases;
 }
