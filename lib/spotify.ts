@@ -136,26 +136,26 @@ export async function getAllTopTracks(): Promise<ArtistTopTracks[]> {
     console.error('[spotify] getAllTopTracks: no token');
     return [];
   }
-  try {
-    async function fetchTopTracks(id: string, market: string) {
-      const res = await fetch(
-        `https://api.spotify.com/v1/artists/${id}/top-tracks?market=${market}`,
-        { headers: { Authorization: `Bearer ${token}` }, cache: 'no-store' }
-      );
-      if (!res.ok) return null;
-      const data = await res.json() as {
-        tracks: {
-          id: string;
-          name: string;
-          duration_ms: number;
-          external_urls: { spotify: string };
-          album: { name: string; images: { url: string }[] };
-          artists: { name: string }[];
-        }[];
-      };
-      return data.tracks?.length ? data.tracks : null;
-    }
+  const fetchTopTracks = async (id: string, market: string) => {
+    const res = await fetch(
+      `https://api.spotify.com/v1/artists/${id}/top-tracks?market=${market}`,
+      { headers: { Authorization: `Bearer ${token}` }, cache: 'no-store' }
+    );
+    if (!res.ok) return null;
+    const data = await res.json() as {
+      tracks: {
+        id: string;
+        name: string;
+        duration_ms: number;
+        external_urls: { spotify: string };
+        album: { name: string; images: { url: string }[] };
+        artists: { name: string }[];
+      }[];
+    };
+    return data.tracks?.length ? data.tracks : null;
+  };
 
+  try {
     return Promise.all(
       ARTIST_IDS.map(async (id, i) => {
         // Probeer NL eerst, dan US als fallback
