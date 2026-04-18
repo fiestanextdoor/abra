@@ -99,7 +99,7 @@ export function Contact({ introComplete }: ContactProps) {
             spotify
           </a>
           <a
-            href="https://www.youtube.com/@abraentertainment"
+            href="https://www.youtube.com/@T%C3%98NIopdebeat"
             target="_blank"
             rel="noopener noreferrer"
             className="contact-link-row"
