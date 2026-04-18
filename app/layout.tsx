@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   title: 'Abra Entertainment | Muzieklabel',
   description:
     'Abra Entertainment — een fris muzieklabel met artiesten als TØNI, AREnD en RENSPLOP. Ontdek onze sound.',
+  icons: {
+    icon: '/logo-ae-blauw.svg',
+    shortcut: '/logo-ae-blauw.svg',
+    apple: '/logo-ae-blauw.svg',
+  },
 };
 
 export default function RootLayout({
