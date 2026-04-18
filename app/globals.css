@@ -322,6 +322,7 @@ main,
   font-style: italic;
   font-size: 1.25rem;
   padding: 0;
+  cursor: pointer;
 }
 
 .site-header--hero .header-nav-mobile-toggle {
@@ -1691,6 +1692,13 @@ main,
     min-height: unset;
   }
 
+  /* Give photo wrap a defined height so the image doesn't collapse */
+  .roster-photo-wrap {
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    height: auto;
+  }
+
   .roster-section--img-right .roster-photo-wrap {
     order: -1;
   }
@@ -1988,6 +1996,16 @@ main,
     padding: 1.5rem 1.4rem;
   }
 
+  /* In hero mode: push toggle to the right */
+  .site-header--hero {
+    justify-content: flex-end;
+  }
+
+  /* Scrolled mode: push toggle to far right */
+  .site-header--scrolled .header-nav-mobile-toggle {
+    margin-left: auto;
+  }
+
   .header-nav {
     display: none;
   }
@@ -2004,6 +2022,12 @@ main,
   .artists-grid {
     grid-template-columns: 1fr;
     gap: 1.25rem;
+  }
+
+  /* Cap card height on single column so they don't become enormous */
+  .artist-card {
+    aspect-ratio: unset;
+    height: clamp(280px, 70vw, 420px);
   }
 
   .artist-card:nth-child(2),
@@ -2032,6 +2056,10 @@ main,
     padding: 0 1.4rem 4rem;
   }
 
+  .shop-cta {
+    padding: 1.1rem 2.5rem;
+  }
+
   .contact {
     padding: 4rem 1.4rem;
   }
@@ -2050,10 +2078,27 @@ main,
     gap: 1.5rem;
   }
 
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
   .releases-inner-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1.25rem;
+  }
+
+  /* Hero: reduce top padding on mobile */
+  .hero {
+    padding: 7rem 1.4rem 5rem;
+  }
+
+  /* Releases featured page: reduce padding on mobile */
+  .releases-featured {
+    padding: 6rem 1.4rem 4rem;
+    min-height: unset;
   }
 }
 
