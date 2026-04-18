@@ -26,18 +26,10 @@ function PlayIcon() {
 
 function ReleaseCard({ release }: { release: Release }) {
   const year = release.release_date ? release.release_date.split('-')[0] : '';
-  const artistLabel =
-    release.artists && release.artists.length > 0
-      ? release.artists.join(', ')
-      : 'tøni';
+  const artistLabel = release.artists?.length ? release.artists.join(', ') : 'tøni';
 
   return (
-    <a
-      href={release.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="release-card"
-    >
+    <a href={release.url} target="_blank" rel="noopener noreferrer" className="release-card">
       <div className="release-cover-wrap">
         {release.image ? (
           <img src={release.image} alt={release.name} className="release-cover-img" />
@@ -48,12 +40,9 @@ function ReleaseCard({ release }: { release: Release }) {
           <PlayIcon />
         </div>
       </div>
-
       <div className="release-meta">
         <span className="release-title">{release.name}</span>
-        <span className="release-artist-date">
-          {artistLabel}{year ? ` — ${year}` : ''}
-        </span>
+        <span className="release-artist-date">{artistLabel}{year ? ` — ${year}` : ''}</span>
       </div>
     </a>
   );
@@ -66,15 +55,11 @@ export function ToniReleasesCarousel({ introComplete }: ToniReleasesCarouselProp
   useEffect(() => {
     fetch('/api/toni-releases')
       .then((res) => res.json())
-      .then((data: Release[]) => {
-        setReleases(Array.isArray(data) ? data : []);
-      })
+      .then((data: Release[]) => setReleases(Array.isArray(data) ? data : []))
       .catch(() => setReleases([]))
       .finally(() => setLoading(false));
   }, []);
 
-  // Genoeg kopieën maken zodat de track altijd de viewport ruim overstijgt.
-  // Minimaal 4 sets zodat de loop bij weinig releases alsnog vloeiend is.
   const REPEAT = Math.max(4, Math.ceil(16 / (releases.length || 1)));
   const track = releases.length > 0
     ? Array.from({ length: REPEAT }, () => releases).flat()
@@ -96,14 +81,7 @@ export function ToniReleasesCarousel({ introComplete }: ToniReleasesCarouselProp
           <span className="section-label">new additions</span>
           <h2 id="releases-heading" className="releases-heading">releases</h2>
         </div>
-        <a
-          href="https://open.spotify.com/artist/1tE9LhdFz72nhlipsg1ea9"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="releases-archive-link"
-        >
-          alle releases
-        </a>
+        <a href="/releases" className="releases-archive-link">alle releases</a>
       </div>
 
       {loading ? (

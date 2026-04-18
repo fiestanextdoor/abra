@@ -69,18 +69,6 @@
   padding: 0;
 }
 
-*,
-*::before,
-*::after,
-a,
-button,
-input,
-textarea,
-select,
-label,
-[role="button"] {
-  cursor: none !important;
-}
 
 html {
   scroll-behavior: smooth;
@@ -172,31 +160,22 @@ h1, h2, h3, h4 {
 }
 
 /* ============================================================
-   CUSTOM CURSOR
+   PAGE TRANSITION
    ============================================================ */
-.cursor-ring,
-.cursor-dot {
+.page-transition {
   position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 120;
-}
-
-.cursor-ring {
-  width: 40px;
-  height: 40px;
-  border-radius: 999px;
-  border: 1px solid rgba(150, 181, 209, 0.45);
-  background: rgba(233, 229, 220, 0.15);
-  backdrop-filter: blur(2px);
-}
-
-.cursor-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
   background: var(--ae-blue);
+  pointer-events: auto;
+}
+
+.page-transition-logo {
+  width: clamp(200px, 50vw, 480px);
+  height: auto;
+  display: block;
 }
 
 /* ============================================================
@@ -212,6 +191,7 @@ main,
 .section-label {
   font-family: var(--font-body);
   font-style: normal;
+  font-weight: 700;
   font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.28em;
@@ -220,7 +200,7 @@ main,
 }
 
 /* ============================================================
-   HEADER  — light blue background, cream text
+   HEADER
    ============================================================ */
 .site-header {
   position: fixed;
@@ -230,10 +210,43 @@ main,
   z-index: 50;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 2rem 2.5rem;
+  background: transparent;
+  transition: background 0.4s ease, opacity 0.35s ease, transform 0.35s ease;
+}
+
+/* Hero mode: niet sticky, nav gecentreerd, transparant */
+.site-header--hero {
+  position: absolute;
+  justify-content: center;
+}
+
+/* Scrolled mode: fixed, blauwe bg, logo links, nav gecentreerd */
+.site-header--scrolled {
+  position: fixed;
+  justify-content: flex-start;
   background: var(--ae-blue);
-  transition: background 0.3s ease;
+  animation: header-slide-in 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.site-header--scrolled.site-header--hiding {
+  animation: header-slide-out 0.34s cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+@keyframes header-slide-in {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+
+@keyframes header-slide-out {
+  from { transform: translateY(0);     opacity: 1; }
+  to   { transform: translateY(-100%); opacity: 0; }
+}
+
+.site-header--scrolled .header-nav {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .header-logo-img {
@@ -257,10 +270,28 @@ main,
   font-family: var(--font-body);
   font-style: italic;
   font-size: 1.25rem;
-  color: var(--ae-cream);
   text-transform: lowercase;
   position: relative;
   transition: opacity 0.25s ease;
+}
+
+/* Hero mode: blue text, groter */
+.site-header--hero .header-nav-link {
+  color: var(--ae-blue);
+  font-size: 1.75rem;
+}
+
+.site-header--hero .header-nav-link::after {
+  background: var(--ae-blue);
+}
+
+/* Scrolled mode: cream text */
+.site-header--scrolled .header-nav-link {
+  color: var(--ae-cream);
+}
+
+.site-header--scrolled .header-nav-link::after {
+  background: var(--ae-cream);
 }
 
 .header-nav-link::after {
@@ -270,7 +301,6 @@ main,
   bottom: -2px;
   width: 100%;
   height: 1px;
-  background: var(--ae-cream);
   transform: scaleX(0);
   transform-origin: left center;
   transition: transform 0.3s ease;
@@ -291,7 +321,73 @@ main,
   font-family: var(--font-body);
   font-style: italic;
   font-size: 1.25rem;
+  padding: 0;
+}
+
+.site-header--hero .header-nav-mobile-toggle {
+  color: var(--ae-blue);
+}
+
+.site-header--scrolled .header-nav-mobile-toggle {
   color: var(--ae-cream);
+}
+
+/* Offcanvas overlay */
+.mobile-nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 48;
+  background: rgba(10, 15, 26, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.mobile-nav-overlay--open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Offcanvas panel */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 49;
+  width: min(80vw, 320px);
+  background: var(--ae-blue);
+  padding: 7rem 2.5rem 3rem;
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-direction: column;
+}
+
+.mobile-nav--open {
+  transform: translateX(0);
+}
+
+.mobile-nav-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mobile-nav-link {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 8vw, 3rem);
+  color: var(--ae-cream);
+  text-transform: lowercase;
+  line-height: 1.2;
+  padding: 0.4rem 0;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.mobile-nav-link:hover {
+  opacity: 1;
 }
 
 /* ============================================================
@@ -787,7 +883,7 @@ main,
   align-items: center;
   gap: 1.1rem;
   color: var(--ae-blue);
-  opacity: 0.65;
+  opacity: 0.9;
   font-family: var(--font-body);
   font-style: italic;
   font-size: 1.15rem;
@@ -809,11 +905,11 @@ main,
 .contact-address {
   font-family: var(--font-body);
   font-style: normal;
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
   color: var(--ae-blue);
-  opacity: 0.4;
+  opacity: 0.75;
   line-height: 2;
 }
 
@@ -1029,6 +1125,378 @@ main,
 }
 
 /* ============================================================
+   RELEASES PAGE — FEATURED
+   ============================================================ */
+.releases-featured {
+  background: var(--ae-cream);
+  padding: 8rem 2.5rem 6rem;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+}
+
+.releases-featured-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+.releases-featured-cover-wrap {
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 3px;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+}
+
+.releases-featured-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.releases-featured-cover--fallback {
+  background: var(--ae-blue);
+  opacity: 0.2;
+  width: 100%;
+  height: 100%;
+}
+
+.releases-featured-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.releases-featured-label {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: 700;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  color: var(--ae-blue);
+  opacity: 0.65;
+}
+
+.releases-featured-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 6rem);
+  color: var(--ae-blue);
+  line-height: 0.92;
+  letter-spacing: -0.01em;
+}
+
+.releases-featured-artist {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--ae-blue);
+  opacity: 0.65;
+}
+
+.releases-featured-tracklist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid rgba(150,181,209,0.2);
+}
+
+.releases-featured-track {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(150,181,209,0.2);
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: 0.88rem;
+  color: var(--ae-blue);
+}
+
+.track-number {
+  opacity: 0.4;
+  font-size: 0.72rem;
+  min-width: 1.5rem;
+}
+
+.track-name {
+  flex: 1;
+}
+
+.track-duration {
+  opacity: 0.5;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+}
+
+.releases-featured-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 2rem;
+  border: 1px solid rgba(150,181,209,0.35);
+  color: var(--ae-blue);
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: background 0.25s ease, border-color 0.25s ease;
+  width: fit-content;
+  margin-top: 0.5rem;
+}
+
+.releases-featured-btn:hover {
+  background: rgba(150,181,209,0.1);
+  border-color: rgba(150,181,209,0.6);
+}
+
+.featured-play-icon {
+  width: 1rem;
+  height: 1rem;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   TOP TRACKS
+   ============================================================ */
+.top-tracks {
+  background: var(--ae-dark);
+  padding: 5rem 2.5rem;
+}
+
+.top-tracks-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.top-tracks-header {
+  margin-bottom: 3rem;
+}
+
+.top-tracks-heading {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  color: var(--ae-cream);
+  line-height: 0.92;
+  margin-top: 0.75rem;
+}
+
+.top-tracks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 3rem;
+}
+
+.top-tracks-artist-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.top-tracks-artist-name {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--ae-blue);
+  opacity: 0.6;
+  margin-bottom: 1rem;
+  text-transform: lowercase;
+}
+
+.top-tracks-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid rgba(150,181,209,0.12);
+}
+
+.top-tracks-list li {
+  border-bottom: 1px solid rgba(150,181,209,0.12);
+}
+
+.top-track-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.65rem 0;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.top-track-row:hover {
+  opacity: 0.75;
+}
+
+.top-track-index {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: 0.68rem;
+  color: var(--ae-blue);
+  opacity: 0.4;
+  min-width: 1.5rem;
+}
+
+.top-track-thumb {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.top-track-name {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.92rem;
+  color: var(--ae-cream);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.top-track-duration {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: 0.72rem;
+  color: var(--ae-blue);
+  opacity: 0.5;
+  letter-spacing: 0.05em;
+}
+
+.top-track-play-icon {
+  width: 14px;
+  height: 14px;
+  fill: var(--ae-blue);
+  opacity: 0.45;
+  flex-shrink: 0;
+  transition: opacity 0.2s ease;
+}
+
+.top-track-row:hover .top-track-play-icon {
+  opacity: 0.9;
+}
+
+@media (max-width: 900px) {
+  .top-tracks-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+/* ============================================================
+   RELEASES PAGE — ARCHIVE
+   ============================================================ */
+.releases-archive {
+  background: var(--ae-cream);
+  padding: 5rem 2.5rem 6rem;
+}
+
+.releases-archive-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.releases-archive-heading {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  color: var(--ae-blue);
+  margin-bottom: 3rem;
+}
+
+.releases-archive-grid {
+  column-count: 3;
+  column-gap: 1.75rem;
+}
+
+.archive-card {
+  display: block;
+  break-inside: avoid;
+  margin-bottom: 1.75rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.archive-card-cover-wrap {
+  overflow: hidden;
+  border-radius: 2px;
+  width: 100%;
+}
+
+.archive-card-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.45s ease;
+}
+
+.archive-card:hover .archive-card-cover {
+  transform: scale(1.04);
+}
+
+.archive-card-cover--fallback {
+  background: var(--ae-blue);
+  opacity: 0.25;
+  aspect-ratio: 1;
+}
+
+.archive-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.65rem 0 0;
+}
+
+.archive-card-title {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--ae-blue);
+  line-height: 1.3;
+}
+
+.archive-card-sub {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: 0.68rem;
+  color: var(--ae-blue);
+  opacity: 0.55;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 900px) {
+  .releases-featured-inner {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .releases-archive-grid {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 600px) {
+  .releases-archive-grid {
+    column-count: 2;
+    column-gap: 1rem;
+  }
+
+  .releases-archive {
+    padding: 3rem 1.4rem 4rem;
+  }
+}
+
+/* ============================================================
    ARTIST ROSTER PAGE
    ============================================================ */
 .roster {
@@ -1043,6 +1511,7 @@ main,
 .roster-header-label {
   font-family: var(--font-body);
   font-style: normal;
+  font-weight: 700;
   font-size: 0.62rem;
   text-transform: uppercase;
   letter-spacing: 0.22em;
@@ -1113,6 +1582,7 @@ main,
   line-height: 1;
   letter-spacing: -0.01em;
   pointer-events: none;
+  text-shadow: 0 2px 18px rgba(0,0,0,0.55), 0 1px 4px rgba(0,0,0,0.4);
 }
 
 /* Text side */
@@ -1145,7 +1615,7 @@ main,
   color: var(--ae-dark);
   line-height: 1.75;
   max-width: 44ch;
-  opacity: 0.75;
+  opacity: 0.88;
 }
 
 .roster-latest {
@@ -1159,6 +1629,7 @@ main,
 .roster-latest-label {
   font-family: var(--font-body);
   font-style: normal;
+  font-weight: 700;
   font-size: 0.62rem;
   text-transform: uppercase;
   letter-spacing: 0.22em;
@@ -1388,6 +1859,7 @@ main,
 .over-tile-label {
   font-family: var(--font-body);
   font-style: normal;
+  font-weight: 700;
   font-size: 0.62rem;
   text-transform: uppercase;
   letter-spacing: 0.22em;
@@ -1524,6 +1996,11 @@ main,
     display: block;
   }
 
+  .mobile-nav-overlay,
+  .mobile-nav {
+    display: block;
+  }
+
   .artists-grid {
     grid-template-columns: 1fr;
     gap: 1.25rem;
@@ -1589,9 +2066,3 @@ main,
   }
 }
 
-@media (hover: none), (pointer: coarse) {
-  .cursor-ring,
-  .cursor-dot {
-    display: none;
-  }
-}

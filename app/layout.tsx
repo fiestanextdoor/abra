@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { SmoothScroll } from '@/components/SmoothScroll';
-import { CustomCursor } from '@/components/CustomCursor';
 import { BackgroundNoise } from '@/components/BackgroundNoise';
+import { PageTransition } from '@/components/PageTransition';
 
 export const metadata: Metadata = {
   title: 'Abra Entertainment | Muzieklabel',
@@ -20,7 +20,7 @@ export default function RootLayout({
       <body>
         <SmoothScroll>
           <BackgroundNoise />
-          <CustomCursor />
+          <PageTransition />
           {children}
         </SmoothScroll>
       </body>

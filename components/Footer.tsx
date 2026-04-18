@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { TransitionLink } from '@/components/TransitionLink';
 
 const NAV_LINKS = [
   { href: '/artiesten', label: 'artiesten' },
@@ -19,9 +19,9 @@ export function Footer() {
 
         <nav className="footer-nav" aria-label="Footer navigatie">
           {NAV_LINKS.map((item) => (
-            <Link key={item.href} href={item.href} className="footer-nav-link">
+            <TransitionLink key={item.href} href={item.href} className="footer-nav-link">
               {item.label}
-            </Link>
+            </TransitionLink>
           ))}
         </nav>
       </div>
