@@ -81,7 +81,7 @@ async function fetchPlaylistTracks(token: string): Promise<Release[]> {
         image: proxyImage(t.album?.images?.[0]?.url ?? ''),
         url: t.external_urls?.spotify ?? '',
         release_date: t.album?.release_date ?? '',
-        artists: t.artists?.map((a) => a.name) ?? [],
+        artists: t.artists?.map((a: { name: string }) => a.name) ?? [],
       });
     }
 
